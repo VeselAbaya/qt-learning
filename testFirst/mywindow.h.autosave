@@ -1,0 +1,22 @@
+#ifndef MYWINDOW_H
+#define MYWINDOW_H
+
+#include <QDialog>
+#include <QWidget>
+#include <QLabel>
+#include <QLineEdit>
+#include <QPushButton>
+#include <QCheckBox>
+#include <QHBoxLayout>
+#include <QVBoxLayout>
+
+class MyWindow: public QDialog {
+    Q_OBJECT // Macros for qmake
+public:
+    MyWindow(QWidget* parent=0);
+private:
+    QLabel* label = new QLabel();
+    
+}
+
+#endif // MYWINDOW_H
