@@ -64,8 +64,8 @@ void LastUserInfo::writeUserInfo() {
     } else if (femaleButton->isChecked()) {
         userInfo.setValue("sex", "female");
     } else {
-        QErrorMessage* errMsg = new QErrorMessage();
-        errMsg->showMessage("Select your gender");
+//        QErrorMessage* errMsg = new QErrorMessage(this);
+//        errMsg->showMessage("Select your gender");
     }
 }
 
