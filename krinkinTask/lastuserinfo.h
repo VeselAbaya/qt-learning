@@ -10,34 +10,9 @@
 #include <QHBoxLayout>
 #include <QLineEdit>
 #include <QString>
-
-class UserInfo {
-public:
-    UserInfo(QString firstName="", QString lastName="", QString sex="Male") {
-        if (!wasCreated) {
-            this->firstName = firstName;
-            this->lastName = lastName;
-            this->sex = sex;
-
-            wasCreated = true;
-        }
-    }
-
-    QString getFirstName() const;
-    QString getLastName() const;
-    QString getSex() const;
-
-    void setFirstName(QString firstName);
-    void setLastName(QString lastName);
-    void setSex(QString sex);
-
-private:
-    QString firstName;
-    QString lastName;
-    QString sex;
-    bool wasCreated = false;
-};
-
+#include <QErrorMessage>
+#include <QDebug>
+#include <QSettings>
 
 class LastUserInfo: public QDialog {
     Q_OBJECT
@@ -55,9 +30,12 @@ private:
     QRadioButton* femaleButton;
     QPushButton* updateButton;
     QPushButton* closeButton;
-    UserInfo userInfo;
+    QPushButton* clearButton;
 
 private slots:
     void updateClicked();
+    void writeUserInfo();
+    void readUserInfo();
+    void removeUserInfo();
 };
 #endif // LASTUSERINFO_H

@@ -10,8 +10,8 @@ LastUserInfo::LastUserInfo(QWidget *parent): QDialog(parent) {
     labelsLayout->addWidget(lastNameLabel);
 
     QVBoxLayout* linesEditLayout = new QVBoxLayout();
-    firstNameLine = new QLineEdit(userInfo.getFirstName());
-    lastNameLine = new QLineEdit(userInfo.getLastName());
+    firstNameLine = new QLineEdit();
+    lastNameLine = new QLineEdit();
     linesEditLayout->addWidget(firstNameLine);
     linesEditLayout->addWidget(lastNameLine);
 
@@ -29,55 +29,76 @@ LastUserInfo::LastUserInfo(QWidget *parent): QDialog(parent) {
     QHBoxLayout* buttonLayout = new QHBoxLayout();
     updateButton = new QPushButton("Update");
     closeButton = new QPushButton("Close");
+    clearButton = new QPushButton("Clear");
     connect(updateButton, SIGNAL(clicked(bool)), this, SLOT(updateClicked()));
     connect(closeButton, SIGNAL(clicked(bool)), this, SLOT(close()));
+    connect(clearButton, SIGNAL(clicked(bool)), this, SLOT(removeUserInfo()));
     buttonLayout->addWidget(updateButton);
     buttonLayout->addWidget(closeButton);
+    buttonLayout->addWidget(clearButton);
 
     QVBoxLayout* mainLayout = new QVBoxLayout();
     mainLayout->addLayout(nameLayout);
     mainLayout->addWidget(sexGroupBox);
     mainLayout->addLayout(buttonLayout);
 
+    readUserInfo();
     setLayout(mainLayout);
     setWindowTitle("Last user information");
     setMinimumWidth(300);
 }
 
 void LastUserInfo::updateClicked() {
-    userInfo.setFirstName(firstNameLine->text());
-    userInfo.setLastName(lastNameLine->text());
-    if (maleButton->isChecked()) {
-        userInfo.setSex("Male");
-    } else if (femaleButton->isChecked()) {
-        userInfo.setSex("Female");
-    }
-
+    writeUserInfo();
     close();
 }
 
-QString UserInfo::getFirstName() const {
-    return firstName;
+void LastUserInfo::writeUserInfo() {
+    QSettings userInfo("My soft", "Last user information");
+
+    userInfo.beginGroup("LastUserInfo");
+    userInfo.setValue("firstName", firstNameLine->text());
+    userInfo.setValue("lastName", lastNameLine->text());
+    if (maleButton->isChecked()) {
+        userInfo.setValue("sex", "male");
+    } else if (femaleButton->isChecked()) {
+        userInfo.setValue("sex", "female");
+    } else {
+        QErrorMessage* errMsg = new QErrorMessage();
+        errMsg->showMessage("Select your gender");
+    }
 }
 
-QString UserInfo::getLastName() const {
-    return lastName;
+void LastUserInfo::readUserInfo() {
+    QSettings userInfo("My soft", "Last user information");
+
+    userInfo.beginGroup("LastUserInfo");
+    firstNameLine->setText(userInfo.value("firstName", "").toString());
+    lastNameLine->setText(userInfo.value("lastName", "").toString());
+    if (userInfo.value("sex").toString() == "male") {
+        maleButton->setChecked(true);
+    } else if (userInfo.value("sex").toString() == "female") {
+        femaleButton->setChecked(true);
+    }
 }
 
-QString UserInfo::getSex() const {
-    return sex;
-}
+void LastUserInfo::removeUserInfo() {
+    QSettings userInfo("My soft", "Last user information");
 
-void UserInfo::setFirstName(QString firstName) {
-    this->firstName = firstName;
-}
+    userInfo.beginGroup("LastUserInfo");
+    userInfo.setValue("firstName", "");
+    userInfo.setValue("lastName", "");
+    userInfo.setValue("sex", "");
+    userInfo.endGroup();
 
-void UserInfo::setLastName(QString lastName) {
-    this->lastName = lastName;
-}
+    firstNameLine->setText("");
+    lastNameLine->setText("");
 
-void UserInfo::setSex(QString sex) {
-    this->sex = sex;
+    maleButton->setAutoExclusive(false);
+    maleButton->setChecked(false);
+//    maleButton->setAutoExclusive(true);
+//    femaleButton->setAutoExclusive(false);
+    femaleButton->setChecked(false);
+    maleButton->setAutoExclusive(true);
 }
-
 
