@@ -50,7 +50,7 @@ LastUserInfo::LastUserInfo(QWidget *parent): QDialog(parent) {
 
 void LastUserInfo::updateClicked() {
     writeUserInfo();
-    close();
+    exit(1);
 }
 
 void LastUserInfo::writeUserInfo() {
