@@ -5,9 +5,13 @@
 #include <QString>
 #include <QFileDialog>
 #include <QTextStream>
+#include <QLabel>
 #include <QFile>
 #include <QSettings>
 #include <QCloseEvent>
+#include <QTextCursor>
+#include <QTextBlock>
+#include <string>
 
 namespace Ui {
     class MainWindow;
@@ -37,6 +41,10 @@ private slots:
     void on_actionCopy_triggered();
     void on_actionUndo_triggered();
     void on_actionRedo_triggered();
+
+    void on_actionExit_triggered();
+
+    void on_textEdit_cursorPositionChanged();
 
 private:
     Ui::MainWindow *ui;

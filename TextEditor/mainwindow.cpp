@@ -10,8 +10,12 @@ MainWindow::MainWindow(QWidget *parent): QMainWindow(parent),
 
     readSettings();
     if (fileOpen(fileName)) {
-        ui->statusBar->showMessage("Yout last editing file(" + fileName + ") has been opened");
+        ui->statusBar->showMessage("Your last editing file(" + fileName + ") has been opened");
     }
+
+//    int textLength = ui->textEdit->toPlainText().length();
+//    QLabel* textLengthLabel = new QLabel("Text length: " + QString::number(textLength), this);
+//    ui->statusBar->addPermanentWidget(textLengthLabel, 20);
 }
 
 MainWindow::~MainWindow() {
@@ -128,4 +132,19 @@ bool MainWindow::fileOpen(QString const& filePath) {
     }
 
     return false;
+}
+
+void MainWindow::on_actionExit_triggered() {
+    closeEvent(new QCloseEvent());
+}
+
+void MainWindow::on_textEdit_cursorPositionChanged() {
+    QTextCursor cursor = ui->textEdit->textCursor();
+    int line = cursor.blockNumber();
+    int column = cursor.columnNumber();
+    int blockLength = cursor.block().length();
+
+    ui->statusBar->showMessage("Line: " + QString::number(line + 1) + "     "
+                               "Column: " + QString::number(column + 1) + "     "
+                               "Block length: " + QString::number(blockLength));
 }
