@@ -107,7 +107,7 @@ short Bmp_image::get_bitcount() {
     return bitcount;
 }
 
-unsigned char** Bmp_image::get_raster() {
+uint8_t** Bmp_image::get_raster() {
     return raster;
 }
 
