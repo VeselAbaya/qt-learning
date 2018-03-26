@@ -12,10 +12,6 @@ MainWindow::MainWindow(QWidget *parent): QMainWindow(parent),
     if (fileOpen(fileName)) {
         ui->statusBar->showMessage("Your last editing file(" + fileName + ") has been opened");
     }
-
-//    int textLength = ui->textEdit->toPlainText().length();
-//    QLabel* textLengthLabel = new QLabel("Text length: " + QString::number(textLength), this);
-//    ui->statusBar->addPermanentWidget(textLengthLabel, 20);
 }
 
 MainWindow::~MainWindow() {
