@@ -4,6 +4,7 @@
 MainWindow::MainWindow(QWidget *parent): QMainWindow(parent),
                                          ui(new Ui::MainWindow) {
     ui->setupUi(this);
+    scene = new QGraphicsScene();
 }
 
 MainWindow::~MainWindow() {
@@ -19,17 +20,17 @@ void MainWindow::on_actionOpen_triggered() {
         ui->width->setText(QString::number(bmp_image->get_width()));
         ui->bitcount->setText(QString::number(bmp_image->get_bitcount()));
 
-        int image_height = bmp_image->get_height();
-        int image_width = bmp_image->get_width();
-        QImage image(image_width, image_height, QImage::Format_RGB888);
-        for (int i = 0; i != image_height; ++i) {
-            for (int j = image_width-1; j >= 0; --j) {
-                image.setPixelColor(j, i, QColor(bmp_image->get_rgb(i, j)));
-            }
-        }
+        QImage image = bmp_image->get_qImage();
 
-        QGraphicsScene* scene = new QGraphicsScene();
         scene->addPixmap(QPixmap::fromImage(image));
         ui->graphics_view->setScene(scene);
     }
+}
+
+
+
+void MainWindow::on_invert_button_clicked() {
+    bmp_image->invert_color();
+    scene->addPixmap(QPixmap::fromImage(bmp_image->get_qImage()));
+    ui->graphics_view->setScene(scene);
 }

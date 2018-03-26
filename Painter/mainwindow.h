@@ -21,8 +21,13 @@ public:
 private slots:
     void on_actionOpen_triggered();
 
+    void on_invert_button_clicked(bool checked);
+
+    void on_invert_button_clicked();
+
 private:
     Ui::MainWindow *ui;
+    QGraphicsScene* scene;
     Bmp_image* bmp_image;
 };
 
