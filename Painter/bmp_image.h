@@ -20,18 +20,21 @@ public:
     Bmp_image(std::string file_path);
     Bmp_image(Bmp_image const& other);
     Bmp_image& operator=(Bmp_image const& other);
+    Bmp_image(Bmp_image&& other);
+    Bmp_image& operator=(Bmp_image&& other);
 
     ~Bmp_image();
 
-    int get_size();
-    int get_height();
-    int get_width();
-    short get_bitcount();
+    int get_size() const;
+    int get_height() const;
+    int get_width() const;
+    short get_bitcount() const;
 
-    uint8_t** get_raster();
-    QRgb get_rgb(int i, int j); // return color from pixel on position (row, column)
-    QImage get_qImage(); // return QImage from raster image
+    uint8_t** get_raster() const;
+    QRgb get_rgb(int x, int y) const; // return color from pixel on position (row, column)
+    QImage get_qImage() const; // return QImage from raster image
     void invert_color(); //invert whole image
+    Bmp_image grayscale() const;
 
 private:
     int size;
