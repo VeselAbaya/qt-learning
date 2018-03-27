@@ -84,18 +84,31 @@
      </item>
     </layout>
    </widget>
-   <widget class="QPushButton" name="invert_button">
+   <widget class="QWidget" name="">
     <property name="geometry">
      <rect>
-      <x>70</x>
-      <y>220</y>
-      <width>118</width>
-      <height>33</height>
+      <x>10</x>
+      <y>430</y>
+      <width>120</width>
+      <height>76</height>
      </rect>
     </property>
-    <property name="text">
-     <string>Invert color</string>
-    </property>
+    <layout class="QVBoxLayout" name="verticalLayout_3">
+     <item>
+      <widget class="QPushButton" name="invert_button">
+       <property name="text">
+        <string>Invert color</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="grayscale_button">
+       <property name="text">
+        <string>Grayscale</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
    </widget>
   </widget>
   <widget class="QMenuBar" name="menuBar">

@@ -10,9 +10,6 @@ Bmp_image::Bmp_image(std::string file_path) {
             check[2] = '\0';
 
             if (std::string(check) == "BM") {
-                file.seekg(BM_SIZE_INDEX);
-                file.read(reinterpret_cast<char*>(&size), sizeof(int));
-
                 file.seekg(BM_WIDTH_INDEX);
                 file.read(reinterpret_cast<char*>(&width), sizeof(int));
 
@@ -21,6 +18,9 @@ Bmp_image::Bmp_image(std::string file_path) {
 
                 file.seekg(BM_BITCOUNT_INDEX);
                 file.read(reinterpret_cast<char*>(&bitcount), sizeof(short));
+
+                size = width * height * bitcount/BYTE_SIZE;
+
                 if (bitcount == 24) {
                     raster = new uint8_t*[height];
                     raster[0] = new uint8_t[height * width*3];
@@ -60,7 +60,8 @@ Bmp_image::Bmp_image(Bmp_image const& other) {
     }
 }
 
-Bmp_image::Bmp_image(int height, int width, short bitcount): height(height),
+Bmp_image::Bmp_image(int width, int height, short bitcount): size(width * height * bitcount/BYTE_SIZE),
+                                                             height(height),
                                                              width(width),
                                                              bitcount(bitcount) {
     raster = new uint8_t*[height];
@@ -77,7 +78,7 @@ Bmp_image& Bmp_image::operator=(Bmp_image const& other) {
     bitcount = other.bitcount;
 
     for (int i = 0; i != height; ++i) {
-        for (int j = 0; j != width*3; ++j) {
+        for (int j = 0; j != (width*3) + (width*3)%4; ++j) {
             raster[i][j] = other.raster[i][j];
         }
     }
@@ -169,12 +170,23 @@ QImage Bmp_image::get_qImage() const {
 
 void Bmp_image::invert_color() {
     for (int i = 0; i != height; ++i) {
-        for (int j = 0; j != width*3 + (width*3)%4; ++j) {
+        for (int j = 0; j != (width*3) + (width*3)%4; ++j) {
             raster[i][j] = 255 - raster[i][j];
         }
     }
 }
 
-//Bmp_image Bmp_image::grayscale() const {
-//    Bmp_image
-//}
+Bmp_image Bmp_image::grayscale() const {
+    Bmp_image gray_image(width, height, bitcount);
+
+    for (int i = 0; i != height; ++i) {
+        for (int j = 0; j != (width*3) + (width*3)%4; ++j) {
+            int avg = (raster[i][j] + raster[i][j+1] + raster[i][j+2]) / 3;
+            gray_image.raster[i][j] = static_cast<uint8_t>(avg);
+            gray_image.raster[i][j+1] = static_cast<uint8_t>(avg);
+            gray_image.raster[i][j+2] = static_cast<uint8_t>(avg);
+        }
+    }
+
+    return gray_image;
+}

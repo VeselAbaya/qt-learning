@@ -25,6 +25,8 @@ private slots:
 
     void on_invert_button_clicked();
 
+    void on_grayscale_button_clicked();
+
 private:
     Ui::MainWindow *ui;
     QGraphicsScene* scene;

@@ -8,7 +8,7 @@
 #include <fstream>
 #include <string>
 
-#define BM_SIZE_INDEX 2
+#define BYTE_SIZE 8
 #define BM_WIDTH_INDEX 18
 #define BM_HEIGHT_INDEX 22
 #define BM_BITCOUNT_INDEX 28
@@ -16,7 +16,7 @@
 
 class Bmp_image {
 public:
-    Bmp_image(int height, int width, short bitcount); // TODO there must be better implementation of raster image (2d array isn't convinient)
+    Bmp_image(int width, int height, short bitcount); // TODO there must be better implementation of raster image (2d array isn't convinient)
     Bmp_image(std::string file_path);
     Bmp_image(Bmp_image const& other);
     Bmp_image& operator=(Bmp_image const& other);
