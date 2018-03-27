@@ -49,7 +49,6 @@ void MainWindow::on_invert_button_clicked() {
 
 
 void MainWindow::on_grayscale_button_clicked() {
-    qDebug() << "Wow";
     scene->clear();
     scene->addPixmap(QPixmap::fromImage(bmp_image->grayscale().get_qImage()));
     ui->graphics_view->setScene(scene);
