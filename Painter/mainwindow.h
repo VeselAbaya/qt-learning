@@ -7,7 +7,7 @@
 #include <QPixmap>
 #include <QImage>
 #include <QString>
-#include "bmp_image.h"
+#include "bmp_image24.h"
 
 namespace Ui { class MainWindow; }
 

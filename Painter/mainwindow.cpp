@@ -1,6 +1,6 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
-#include <QDebug>
+
 MainWindow::MainWindow(QWidget *parent): QMainWindow(parent),
                                          ui(new Ui::MainWindow) {
     ui->setupUi(this);
@@ -23,7 +23,7 @@ void MainWindow::on_actionOpen_triggered() {
             delete bmp_image;
         }
 
-        bmp_image = new Bmp_image(file_path.toStdString());
+        bmp_image = new Bmp_image24(file_path.toStdString());
         ui->size->setText(QString::number(bmp_image->get_size()));
         ui->height->setText(QString::number(bmp_image->get_height()));
         ui->width->setText(QString::number(bmp_image->get_width()));
@@ -33,6 +33,7 @@ void MainWindow::on_actionOpen_triggered() {
         scene->addPixmap(QPixmap::fromImage(image));
 
         ui->graphics_view->resize(bmp_image->get_width(), bmp_image->get_height());
+        this->resize(this->geometry().width() + bmp_image->get_width() / 3, this->geometry().height() + bmp_image->get_height() / 3);
         ui->graphics_view->setScene(scene);
     }
 }
@@ -49,7 +50,11 @@ void MainWindow::on_invert_button_clicked() {
 
 
 void MainWindow::on_grayscale_button_clicked() {
-    scene->clear();
-    scene->addPixmap(QPixmap::fromImage(bmp_image->grayscale().get_qImage()));
-    ui->graphics_view->setScene(scene);
+//    scene->clear();
+//    scene->addPixmap(QPixmap::fromImage(bmp_image->grayscale()->get_qImage()));
+//    ui->graphics_view->setScene(scene);
+}
+
+void MainWindow::on_invert_button_clicked(bool checked) {
+    // TODO somethig lol :)
 }
