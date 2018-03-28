@@ -23,7 +23,7 @@ void MainWindow::on_actionOpen_triggered() {
             delete bmp_image;
         }
 
-        bmp_image = new Bmp_image24(file_path.toStdString());
+        bmp_image = bmp_init(file_path.toStdString());
         ui->size->setText(QString::number(bmp_image->get_size()));
         ui->height->setText(QString::number(bmp_image->get_height()));
         ui->width->setText(QString::number(bmp_image->get_width()));
@@ -33,7 +33,6 @@ void MainWindow::on_actionOpen_triggered() {
         scene->addPixmap(QPixmap::fromImage(image));
 
         ui->graphics_view->resize(bmp_image->get_width(), bmp_image->get_height());
-        this->resize(this->geometry().width() + bmp_image->get_width() / 3, this->geometry().height() + bmp_image->get_height() / 3);
         ui->graphics_view->setScene(scene);
     }
 }

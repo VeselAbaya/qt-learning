@@ -38,10 +38,12 @@ Bmp_image24::Bmp_image24(std::string file_path) {
                         }
                     }
                 } else {
-                    // TODO there must be dialog with exception
+                    // TODO there must be dialog with exception (ISN'T BMP FORMAT!!!)
                 }
             }
         }
+
+        file.close();
     }
 }
 

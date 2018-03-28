@@ -10,16 +10,10 @@
 #include <fstream>
 #include <string>
 
-#define BYTE_SIZE 8
-#define BM_WIDTH_INDEX 18
-#define BM_HEIGHT_INDEX 22
-#define BM_BITCOUNT_INDEX 28
-#define BM_OFFBITS_INDEX 10
-
 class Bmp_image24: public Bmp_image {
 public:
+    Bmp_image24(std::string file_path); // Deprecated, better use: bmp_init() from bmp.h
     Bmp_image24(int width, int height); // TODO there must be better implementation of raster image (2d array isn't convinient)
-    Bmp_image24(std::string file_path);
     Bmp_image24(Bmp_image24 const& other);
     Bmp_image24& operator=(Bmp_image24 const& other);
     Bmp_image24(Bmp_image24&& other);
@@ -40,6 +34,7 @@ public:
 //    void grayscale();                 // convert to grayscale image
 
 private:
+
     int size;
     int height;
     int width;

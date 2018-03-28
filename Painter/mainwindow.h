@@ -1,13 +1,14 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
+#include "bmp.h"
+
 #include <QMainWindow>
 #include <QFileDialog>
 #include <QGraphicsScene>
 #include <QPixmap>
 #include <QImage>
 #include <QString>
-#include "bmp_image24.h"
 
 namespace Ui { class MainWindow; }
 
