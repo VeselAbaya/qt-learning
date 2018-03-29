@@ -177,17 +177,13 @@ void Bmp_image24::invert_color() {
     }
 }
 
-//void Bmp_image24::grayscale() const {
-//    Bmp_image* gray_image = new Bmp_image24(width, height, bitcount);
-
-//    for (int i = 0; i != height; ++i) {
-//        for (int j = 0; j != (width*3) + (width*3)%4; ++j) {
-//            int avg = (raster[i][j] + raster[i][j+1] + raster[i][j+2]) / 3;
-//            gray_image.raster[i][j] = static_cast<uint8_t>(avg);
-//            gray_image.raster[i][j+1] = static_cast<uint8_t>(avg);
-//            gray_image.raster[i][j+2] = static_cast<uint8_t>(avg);
-//        }
-//    }
-
-//    return gray_image;
-//}
+void Bmp_image24::grayscale() {
+    for (int i = 0; i != height; ++i) {
+        for (int j = 0; j < (width*3) + (width*3)%4; j+=3) {
+            int avg = (raster[i][j] + raster[i][j+1] + raster[i][j+2]) / 3;
+            raster[i][j] = static_cast<uint8_t>(avg);
+            raster[i][j+1] = static_cast<uint8_t>(avg);
+            raster[i][j+2] = static_cast<uint8_t>(avg);
+        }
+    }
+}

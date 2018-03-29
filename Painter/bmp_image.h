@@ -26,7 +26,7 @@ public:
     virtual QRgb get_rgb(int x, int y) const = 0; // return color from pixel on position (row, column)
     virtual QImage get_qImage() const        = 0; // return QImage from raster image
     virtual void invert_color()              = 0; // invert whole image
-//    virtual void grayscale()                 = 0; // convert to grayscale image
+    virtual void grayscale()                 = 0; // convert to grayscale image
 };
 
 #endif // BMP_IMAGE_H

@@ -29,10 +29,9 @@ void MainWindow::on_actionOpen_triggered() {
         ui->width->setText(QString::number(bmp_image->get_width()));
         ui->bitcount->setText(QString::number(bmp_image->get_bitcount()));
 
-        QImage image = bmp_image->get_qImage();
-        scene->addPixmap(QPixmap::fromImage(image));
+        scene->addPixmap(QPixmap::fromImage(bmp_image->get_qImage()));
 
-        ui->graphics_view->resize(bmp_image->get_width(), bmp_image->get_height());
+//        ui->graphics_view->resize(bmp_image->get_width(), bmp_image->get_height());
         ui->graphics_view->setScene(scene);
     }
 }
@@ -49,9 +48,10 @@ void MainWindow::on_invert_button_clicked() {
 
 
 void MainWindow::on_grayscale_button_clicked() {
-//    scene->clear();
-//    scene->addPixmap(QPixmap::fromImage(bmp_image->grayscale()->get_qImage()));
-//    ui->graphics_view->setScene(scene);
+    bmp_image->grayscale();
+    scene->clear();
+    scene->addPixmap(QPixmap::fromImage(bmp_image->get_qImage()));
+    ui->graphics_view->setScene(scene);
 }
 
 void MainWindow::on_invert_button_clicked(bool checked) {

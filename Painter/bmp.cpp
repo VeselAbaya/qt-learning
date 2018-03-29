@@ -14,16 +14,16 @@ Bmp_image* bmp_init(std::string file_path) {
                 file.seekg(BM_BITCOUNT_INDEX);
                 file.read(reinterpret_cast<char*>(&bitcount), sizeof(short));
 
+                Bmp_image* bmp_image;
                 switch(bitcount) {
-                    case 24:
-                        Bmp_image* bmp_image24 = new Bmp_image24(file_path);
-                        return bmp_image24;
-                        break;
-
-                    default:
-                        break; // TODO there must be dialog with exception
+                    case 24: bmp_image = new Bmp_image24(file_path); break;
+                    default: bmp_image = nullptr;
                 }
+
+                return bmp_image;
             }
         }
     }
+
+    return nullptr;
 }
