@@ -27,7 +27,7 @@ public:
     int get_width() const;
     short get_bitcount() const;
 
-    uint8_t** get_raster() const;     // return raster aka byte array
+    uint8_t* get_raster() const;      // return raster aka byte array
     QRgb get_rgb(int x, int y) const; // return color from pixel on position (row, column)
     QImage get_qImage() const;        // return QImage from raster image
     void invert_color();              // invert whole image

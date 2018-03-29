@@ -1,6 +1,6 @@
 #include "bmp.h"
 
-Bmp_image* bmp_init(std::string file_path) {
+Bmp_image* Bmp::read(std::string file_path) {
     if (file_path != "") {
         std::ifstream file;
         file.open(file_path, std::ios::in | std::ios::binary);
@@ -26,4 +26,13 @@ Bmp_image* bmp_init(std::string file_path) {
     }
 
     return nullptr;
+}
+
+Bmp_image* Bmp::copy(Bmp_image *image) { // TODO maybe need to think about some exceptions
+    Bmp_image* copy;
+    switch(image->get_bitcount()) {
+        case 24: copy = new Bmp_image24(*static_cast<Bmp_image24*>(image)); break;
+    }
+
+    return copy;
 }

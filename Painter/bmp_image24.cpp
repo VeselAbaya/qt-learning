@@ -138,17 +138,11 @@ short Bmp_image24::get_bitcount() const {
     return bitcount;
 }
 
-uint8_t** Bmp_image24::get_raster() const {
-    uint8_t** copy = new uint8_t*[height];
-    copy[0] = new uint8_t[height * width*3];
-    for (int i = 1; i != height; ++i) {
-        copy[i] = copy[i-1] + width*3;
-    }
+uint8_t* Bmp_image24::get_raster() const {
+    uint8_t* copy = new uint8_t[height * width*3];
 
-    for (int i = 0; i != height; ++i) {
-        for (int j = 0; j != (width*3) + (width*3)%4; ++j) {
-            copy[i][j] = raster[i][j];
-        }
+    for (int i = 0; i != height * width*3; ++i) {
+        copy[i] = *raster[i];
     }
 
     return copy;

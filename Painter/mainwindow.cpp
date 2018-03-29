@@ -23,7 +23,7 @@ void MainWindow::on_actionOpen_triggered() {
             delete bmp_image;
         }
 
-        bmp_image = bmp_init(file_path.toStdString());
+        bmp_image = Bmp::read(file_path.toStdString());
         ui->size->setText(QString::number(bmp_image->get_size()));
         ui->height->setText(QString::number(bmp_image->get_height()));
         ui->width->setText(QString::number(bmp_image->get_width()));

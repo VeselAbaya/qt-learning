@@ -22,11 +22,11 @@ public:
     virtual int get_width() const      = 0;
     virtual short get_bitcount() const = 0;
 
-    virtual uint8_t** get_raster() const     = 0; // return raster aka byte array
+    virtual uint8_t* get_raster() const     = 0; // return raster aka byte array
     virtual QRgb get_rgb(int x, int y) const = 0; // return color from pixel on position (row, column)
     virtual QImage get_qImage() const        = 0; // return QImage from raster image
-    virtual void invert_color()              = 0; // invert whole image
-    virtual void grayscale()                 = 0; // convert to grayscale image
+    virtual void invert_color() {}; // invert whole image
+    virtual void grayscale() {}; // convert to grayscale image
 };
 
 #endif // BMP_IMAGE_H

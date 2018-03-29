@@ -7,6 +7,9 @@
 #include <string>
 #include <cstdint>
 
-Bmp_image* bmp_init(std::string file_path);
+namespace Bmp {
+    Bmp_image* read(std::string file_path);
+    Bmp_image* copy(Bmp_image* image);
+}
 
 #endif // BMP_H
