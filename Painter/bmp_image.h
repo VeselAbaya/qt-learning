@@ -1,11 +1,9 @@
 #ifndef BMP_IMAGE_H
 #define BMP_IMAGE_H
 
-#include <QImage>
 #include <QRgb>
+#include <QImage>
 
-#include <cstdint> // for uint8_t
-#include <fstream>
 #include <string>
 
 #define BYTE_SIZE 8
@@ -16,32 +14,19 @@
 
 class Bmp_image {
 public:
-    Bmp_image(int width, int height, short bitcount); // TODO there must be better implementation of raster image (2d array isn't convinient)
-    Bmp_image(std::string file_path);
-    Bmp_image(Bmp_image const& other);
-    Bmp_image& operator=(Bmp_image const& other);
-    Bmp_image(Bmp_image&& other);
-    Bmp_image& operator=(Bmp_image&& other);
+    virtual ~Bmp_image() {}
 
-    ~Bmp_image();
+    // getters
+    virtual int get_size() const       = 0;
+    virtual int get_height() const     = 0;
+    virtual int get_width() const      = 0;
+    virtual short get_bitcount() const = 0;
 
-    int get_size() const;
-    int get_height() const;
-    int get_width() const;
-    short get_bitcount() const;
-
-    uint8_t** get_raster() const;
-    QRgb get_rgb(int x, int y) const; // return color from pixel on position (row, column)
-    QImage get_qImage() const; // return QImage from raster image
-    void invert_color(); //invert whole image
-    Bmp_image grayscale() const;
-
-private:
-    int size;
-    int height;
-    int width;
-    short bitcount; // bits on color
-    uint8_t** raster;
+    virtual uint8_t* get_raster() const      = 0; // return raster aka byte array
+    virtual QRgb get_rgb(int x, int y) const = 0; // return color from pixel on position (row, column)
+    virtual QImage get_qImage() const        = 0; // return QImage from raster image
+    virtual void invert_color() {}; // invert whole image
+    virtual void grayscale() {}; // convert to grayscale image
 };
 
 #endif // BMP_IMAGE_H

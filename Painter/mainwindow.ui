@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>987</width>
-    <height>604</height>
+    <width>1072</width>
+    <height>659</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -17,96 +17,92 @@
    <widget class="QGraphicsView" name="graphics_view">
     <property name="geometry">
      <rect>
-      <x>280</x>
+      <x>270</x>
       <y>0</y>
-      <width>641</width>
-      <height>511</height>
+      <width>791</width>
+      <height>581</height>
      </rect>
     </property>
    </widget>
    <widget class="QWidget" name="layoutWidget">
     <property name="geometry">
      <rect>
-      <x>2</x>
-      <y>2</y>
-      <width>268</width>
-      <height>152</height>
+      <x>1</x>
+      <y>1</y>
+      <width>267</width>
+      <height>238</height>
      </rect>
     </property>
-    <layout class="QHBoxLayout" name="horizontalLayout">
+    <layout class="QVBoxLayout" name="verticalLayout_4">
      <item>
-      <layout class="QVBoxLayout" name="verticalLayout_2">
+      <layout class="QHBoxLayout" name="horizontalLayout">
        <item>
-        <widget class="QLabel" name="label">
-         <property name="text">
-          <string>Size</string>
-         </property>
-        </widget>
+        <layout class="QVBoxLayout" name="verticalLayout_2">
+         <item>
+          <widget class="QLabel" name="label">
+           <property name="text">
+            <string>Size</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLabel" name="label_3">
+           <property name="text">
+            <string>Width</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLabel" name="label_2">
+           <property name="text">
+            <string>Height</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLabel" name="label_4">
+           <property name="text">
+            <string>Bitcount</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
        </item>
        <item>
-        <widget class="QLabel" name="label_3">
-         <property name="text">
-          <string>Width</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QLabel" name="label_2">
-         <property name="text">
-          <string>Height</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QLabel" name="label_4">
-         <property name="text">
-          <string>Bitcount</string>
-         </property>
-        </widget>
+        <layout class="QVBoxLayout" name="verticalLayout">
+         <item>
+          <widget class="QLineEdit" name="size"/>
+         </item>
+         <item>
+          <widget class="QLineEdit" name="width"/>
+         </item>
+         <item>
+          <widget class="QLineEdit" name="height"/>
+         </item>
+         <item>
+          <widget class="QLineEdit" name="bitcount"/>
+         </item>
+        </layout>
        </item>
       </layout>
      </item>
      <item>
-      <layout class="QVBoxLayout" name="verticalLayout">
+      <layout class="QVBoxLayout" name="verticalLayout_3">
        <item>
-        <widget class="QLineEdit" name="size"/>
+        <widget class="QPushButton" name="invert_button">
+         <property name="text">
+          <string>Invert color</string>
+         </property>
+        </widget>
        </item>
        <item>
-        <widget class="QLineEdit" name="width"/>
-       </item>
-       <item>
-        <widget class="QLineEdit" name="height"/>
-       </item>
-       <item>
-        <widget class="QLineEdit" name="bitcount"/>
+        <widget class="QPushButton" name="grayscale_button">
+         <property name="text">
+          <string>Grayscale</string>
+         </property>
+        </widget>
        </item>
       </layout>
-     </item>
-    </layout>
-   </widget>
-   <widget class="QWidget" name="">
-    <property name="geometry">
-     <rect>
-      <x>10</x>
-      <y>430</y>
-      <width>120</width>
-      <height>76</height>
-     </rect>
-    </property>
-    <layout class="QVBoxLayout" name="verticalLayout_3">
-     <item>
-      <widget class="QPushButton" name="invert_button">
-       <property name="text">
-        <string>Invert color</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QPushButton" name="grayscale_button">
-       <property name="text">
-        <string>Grayscale</string>
-       </property>
-      </widget>
      </item>
     </layout>
    </widget>
@@ -116,7 +112,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>987</width>
+     <width>1072</width>
      <height>28</height>
     </rect>
    </property>
