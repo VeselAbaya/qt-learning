@@ -7,6 +7,7 @@
 #include <QRgb>
 
 #include <cstdint> // for uint8_t
+#include <algorithm>
 #include <fstream>
 #include <string>
 
@@ -21,6 +22,9 @@ public:
 
     ~Bmp_image24();
 
+    // setters
+    void set_color(int x, int y, QColor const& color);
+
     // getters
     int get_size() const;
     int get_height() const;
@@ -33,6 +37,8 @@ public:
     void invert_color();              // invert whole image
     void grayscale();                 // convert to grayscale image
 
+    virtual void invert_color(int x1, int y1, int x2, int y2);
+    virtual void grayscale(int x1, int y1, int x2, int y2);
 private:
 
     int size;

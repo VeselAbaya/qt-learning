@@ -39,7 +39,7 @@ void MainWindow::on_actionOpen_triggered() {
 
 
 void MainWindow::on_invert_button_clicked() {
-    bmp_image->invert_color();
+    bmp_image->invert_color(100, 150, 200, 250);
     scene->clear();
     scene->addPixmap(QPixmap::fromImage(bmp_image->get_qImage()));
     ui->graphics_view->setScene(scene);
@@ -48,13 +48,11 @@ void MainWindow::on_invert_button_clicked() {
 
 
 void MainWindow::on_grayscale_button_clicked() {
-    Bmp_image* grayscale_copy = Bmp::copy(bmp_image);
-    grayscale_copy->grayscale();
+    bmp_image->grayscale(300, 50, 20, 300);
+//    bmp_image->grayscale();
     scene->clear();
-    scene->addPixmap(QPixmap::fromImage(grayscale_copy->get_qImage()));
+    scene->addPixmap(QPixmap::fromImage(bmp_image->get_qImage()));
     ui->graphics_view->setScene(scene);
-
-    delete grayscale_copy;
 }
 
 void MainWindow::on_invert_button_clicked(bool checked) {

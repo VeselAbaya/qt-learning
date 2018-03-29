@@ -1,5 +1,5 @@
 #include "bmp_image24.h"
-#include <QDebug>
+
 Bmp_image24::Bmp_image24(std::string file_path) {
     if (file_path != "") {
         std::ifstream file;
@@ -122,6 +122,12 @@ Bmp_image24::~Bmp_image24() {
     delete [] raster;
 }
 
+void Bmp_image24::set_color(int x, int y, QColor const& color) {
+    raster[y][x]   = color.blue();
+    raster[y][x+1] = color.green();
+    raster[y][x+2] = color.red();
+}
+
 int Bmp_image24::get_size() const {
     return size;
 }
@@ -178,6 +184,35 @@ void Bmp_image24::grayscale() {
             raster[i][j] = static_cast<uint8_t>(avg);
             raster[i][j+1] = static_cast<uint8_t>(avg);
             raster[i][j+2] = static_cast<uint8_t>(avg);
+        }
+    }
+}
+
+void Bmp_image24::invert_color(int x1, int y1, int x2, int y2) {
+    int x_min = std::min(x1, x2);
+    int y_min = std::min(y1, y2);
+    int x_max = std::max(x1, x2);
+    int y_max = std::max(y1, y2);
+
+    for (int y = y_min; y != y_max; ++y) {
+        for (int x = x_min; x != x_max; ++x) {
+            this->set_color(x, y, QColor(255 - raster[y][x+2], 255 - raster[y][x+1], 255 - raster[y][x]));
+        }
+    }
+}
+
+void Bmp_image24::grayscale(int x1, int y1, int x2, int y2) {
+    int x_min = std::min(x1, x2);
+    int y_min = std::min(y1, y2);
+    int x_max = std::max(x1, x2);
+    int y_max = std::max(y1, y2);
+
+    for (int y = y_min; y != y_max; ++y) {
+        for (int x = x_min; x < x_max; x+=3) {
+            int avg = (raster[y][x] + raster[y][x+1] + raster[y][x+2]) / 3;
+            raster[y][x] = static_cast<uint8_t>(avg);
+            raster[y][x+1] = static_cast<uint8_t>(avg);
+            raster[y][x+2] = static_cast<uint8_t>(avg);
         }
     }
 }
