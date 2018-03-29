@@ -46,15 +46,23 @@ void Bmp::save(Bmp_image *image, std::string file_path) {
 
         file.seekp(BM_RESERVED1_INDEX);
         file.write("0000", 2*sizeof(short)); // First two zeros it's reserved1, second - reserved2
-
+        
         switch (image->get_bitcount()) {
-            case 24: file.write("24", sizeof(int)); break;
+            case 24: 
+                file.write("54", sizeof(int)); // BM_OFFBITS_INDEX
+                file.seekp(BM_BITCOUNT_INDEX);
+                file.write("24", sizeof(short));
+                file.seekp(BM_OFFBITS_INDEX + sizeof(int));
+                break;
         }
 
         file.write("12", sizeof(int));
         file.write(reinterpret_cast<char*>(image->get_width()), sizeof(short));
         file.write(reinterpret_cast<char*>(image->get_height()), sizeof(short));
-        file.write("1", 1);
-
+        file.write("1", sizeof(short));
+        file.seekp(BM_BITCOUNT_INDEX + sizeof(short));
+        file.write("0", sizeof(int));
+        file.write(reinterpret_cast<char*>(image->get_size()), sizeof(int));
+        /*file.write(reinterpret_cast<char*>(image->get_width()))*/ // Pixels on meter (wat?!)
     }
 }

@@ -8,10 +8,12 @@
 #include <string>
 
 #define BYTE_SIZE 8
+
+#define BM_RESERVED1_INDEX 6
+#define BM_OFFBITS_INDEX 10
 #define BM_WIDTH_INDEX 18
 #define BM_HEIGHT_INDEX 22
 #define BM_BITCOUNT_INDEX 28
-#define BM_OFFBITS_INDEX 10
 
 class Bmp_image {
 public:
@@ -22,8 +24,8 @@ public:
 
     // getters
     virtual int get_size() const       = 0;
-    virtual int get_height() const     = 0;
-    virtual int get_width() const      = 0;
+    virtual short get_height() const   = 0;
+    virtual short get_width() const    = 0;
     virtual short get_bitcount() const = 0;
 
     virtual uint8_t* get_raster() const      = 0; // return raster aka byte array

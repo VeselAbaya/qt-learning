@@ -10,6 +10,7 @@
 namespace Bmp {
     Bmp_image* read(std::string file_path);
     Bmp_image* copy(Bmp_image* image);
+    void save(Bmp_image* image, std::string file_path="");
 }
 
 #endif // BMP_H

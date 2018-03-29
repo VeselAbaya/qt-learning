@@ -11,10 +11,10 @@ Bmp_image24::Bmp_image24(std::string file_path) {
 
             if (std::string(check) == "BM") {
                 file.seekg(BM_WIDTH_INDEX);
-                file.read(reinterpret_cast<char*>(&width), sizeof(int));
+                file.read(reinterpret_cast<char*>(&width), sizeof(short));
 
                 file.seekg(BM_HEIGHT_INDEX);
-                file.read(reinterpret_cast<char*>(&height), sizeof(int));
+                file.read(reinterpret_cast<char*>(&height), sizeof(short));
 
                 file.seekg(BM_BITCOUNT_INDEX);
                 file.read(reinterpret_cast<char*>(&bitcount), sizeof(short));
@@ -62,9 +62,9 @@ Bmp_image24::Bmp_image24(Bmp_image24 const& other) {
     }
 }
 
-Bmp_image24::Bmp_image24(int width, int height): size(width * height * bitcount/BYTE_SIZE),
-                                                             height(height),
-                                                             width(width) {
+Bmp_image24::Bmp_image24(short width, short height): size(width * height * bitcount/BYTE_SIZE),
+                                                     height(height),
+                                                     width(width) {
     raster = new uint8_t*[height];
     raster[0] = new uint8_t[height * width*3];
     for (int i = 1; i != height; ++i) {
@@ -88,10 +88,10 @@ Bmp_image24& Bmp_image24::operator=(Bmp_image24 const& other) {
 }
 
 Bmp_image24::Bmp_image24(Bmp_image24&& other): size(other.size),
-                                         height(other.height),
-                                         width(other.width),
-                                         bitcount(other.bitcount),
-                                         raster(other.raster) {
+                                               height(other.height),
+                                               width(other.width),
+                                               bitcount(other.bitcount),
+                                               raster(other.raster) {
     other.size     = 0;
     other.width    = 0;
     other.height   = 0;
@@ -132,11 +132,11 @@ int Bmp_image24::get_size() const {
     return size;
 }
 
-int Bmp_image24::get_height() const {
+short Bmp_image24::get_height() const {
     return height;
 }
 
-int Bmp_image24::get_width() const {
+short Bmp_image24::get_width() const {
     return width;
 }
 
