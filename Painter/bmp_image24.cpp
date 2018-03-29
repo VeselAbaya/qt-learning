@@ -1,5 +1,5 @@
 #include "bmp_image24.h"
-
+#include <QDebug>
 Bmp_image24::Bmp_image24(std::string file_path) {
     if (file_path != "") {
         std::ifstream file;
@@ -56,7 +56,7 @@ Bmp_image24::Bmp_image24(Bmp_image24 const& other) {
     raster = new uint8_t*[height];
     for (int i = 0; i != height; ++i) {
         raster[i] = new uint8_t[width*3];
-        for (int j = 0; j != width; ++j) {
+        for (int j = 0; j != (width*3) + (width*3)%4; ++j) {
             raster[i][j] = other.raster[i][j];
         }
     }
