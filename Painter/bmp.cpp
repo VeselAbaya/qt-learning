@@ -43,84 +43,51 @@ void Bmp::save(Bmp_image *image, std::string file_path) {
     file.open(file_path, std::ios::out | std::ios::binary);
 
     if (file.is_open()) {
-        // BITMAP FILE HEADER
-        file.write("BM", 2);
+        BitMapFileHeader bm_header;
+        BitMapInfo       bm_info;
 
-        int width = image->get_width();
-        int height = image->get_height();
-        int size = image->get_size();
-        int file_size = 14 + 40 + height * ((width*3) + (width*3)%4);
-        file.write(reinterpret_cast<char*>(&file_size), sizeof(int));
+        bm_header.bfType1     = 'B';
+        bm_header.bfType2     = 'M';
+        bm_header.bfSize      = sizeof(BitMapFileHeader) + sizeof(BitMapInfo) + image->get_size();
+        bm_header.bfReserved1 = bm_header.bfReserved2 = 0;
 
-        int reserved01 = 0;
-        int reserved02 = 0;
-        file.write(reinterpret_cast<char*>(&reserved01), sizeof(short)); // First two zeros it's reserved1, second - reserved2
-        file.write(reinterpret_cast<char*>(&reserved02), sizeof(short));
-
+        bm_info.biSize          = 40;
+        bm_info.biWidth         = image->get_width();
+        bm_info.biHeight        = image->get_height();
+        bm_info.biPlanes        = 1;
+        bm_info.biCompression   = 0;
+        bm_info.biSizeImage     = image->get_size();
+        bm_info.biXPelsPerMeter = MICROSOFT_PPM;
+        bm_info.biYPelsPerMeter = MICROSOFT_PPM;
 
         switch (image->get_bitcount()) {
             case 24:
-                file.write("54", sizeof(int)); // BM_OFFBITS_INDEX
-                file.seekp(BM_BITCOUNT_INDEX);
-                file.write("24", sizeof(short)); // bitcount
+                bm_header.bfOffBits    = 54;
+                bm_info.biBitCount     = 24;
+                bm_info.biClrUsed      = 0;
+                bm_info.biClrImportant = 0;
 
-                file.seekp(54);
-                uint8_t** byte_array = new uint8_t*[height];
-                byte_array[0] = new uint8_t[height * ((width*3) + (width*3)%4)];
-                for (int i = 1; i != height; ++i) {
-                    byte_array[i] = byte_array[i-1] + (width*3) + (width*3)%4;
+                file.write(reinterpret_cast<char*>(&bm_header), sizeof(BitMapFileHeader));
+                file.write(reinterpret_cast<char*>(&bm_info), sizeof(BitMapInfo));
+
+                uint8_t** byte_array = new uint8_t*[bm_info.biHeight];
+                byte_array[0] = new uint8_t[bm_info.biHeight * ((bm_info.biWidth*3) + (bm_info.biWidth*3)%4)];
+                for (int i = 1; i != bm_info.biHeight; ++i) {
+                    byte_array[i] = byte_array[i-1] + (bm_info.biWidth*3) + (bm_info.biWidth*3)%4;
                 }
 
-                for (int i = 0; i != height; ++i) {
-                    for (int j = 0; j != width*3; ++j) {
+                for (int i = 0; i != bm_info.biHeight; ++i) {
+                    for (int j = 0; j != bm_info.biWidth*3; ++j) {
                         byte_array[i][j] = image->get_raster(i, j);
                     }
 
-                    for (int j = width*3; j != ((width*3) + (width*3)%4); ++j) {
+                    for (int j = bm_info.biWidth*3; j != ((bm_info.biWidth*3) + (bm_info.biWidth*3)%4); ++j) {
                         byte_array[i][j] = 0;
                     }
-                } file.write(reinterpret_cast<char*>(byte_array[0]), height * ((width*3) + (width*3)%4));
+                }
 
-                file.seekp(BM_OFFBITS_INDEX + sizeof(int));
-                break;
+                file.write(reinterpret_cast<char*>(byte_array[0]), bm_info.biHeight * ((bm_info.biWidth*3) + (bm_info.biWidth*3)%4));
+            break;
         }
-
-        //BITMAP INFO HEADER
-        file.write("40", sizeof(int)); // biSize
-        file.write(reinterpret_cast<char*>(&width), sizeof(int)); // biWidth
-        file.write(reinterpret_cast<char*>(&height), sizeof(int)); // biHeight
-        file.write("1", sizeof(short)); // biPlanes
-        file.seekp(BM_BITCOUNT_INDEX + sizeof(short)); // seek because of bitcount have been written earlier
-        file.write("0", sizeof(int)); // biCompression
-        file.write(reinterpret_cast<char*>(&size), sizeof(int)); // biSizeImage
-        file.write("3780", sizeof(int)); // biXPelsPerMeter
-        file.write("3780", sizeof(int)); // biYPelsPerMeter
-        file.write("0", sizeof(int)); // biCrlUsed
-        file.write("0", sizeof(int)); // biCrlImportant
-
-        file.close();
-
-        //testing
-        char BM[3];
-        BM[2] = '\0';
-        int test_size;
-        short reserved1, reserved2;
-        unsigned offbits;
-        std::ifstream file;
-        file.open(file_path, std::ios::in | std::ios::binary);
-
-        file.read(BM, 2);
-        qDebug() << BM;
-
-        file.read(reinterpret_cast<char*>(&test_size), sizeof(int));
-        qDebug() << test_size;
-
-        file.read(reinterpret_cast<char*>(&reserved1), sizeof(short));
-        file.read(reinterpret_cast<char*>(&reserved2), sizeof(short));
-        qDebug() << reserved1 << reserved2;
-
-        file.seekg(BM_OFFBITS_INDEX);
-        file.read(reinterpret_cast<char*>(&offbits), sizeof(int));
-        qDebug() << offbits;
     }
 }

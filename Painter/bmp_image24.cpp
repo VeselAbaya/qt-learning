@@ -1,44 +1,32 @@
 #include "bmp_image24.h"
 #include <QDebug>
+
 Bmp_image24::Bmp_image24(std::string file_path) {
-    qDebug() << "here";
     if (file_path != "") {
+        BitMapFileHeader bm_header;
+        BitMapInfo       bm_info;
+
         std::ifstream file;
         file.open(file_path, std::ios::in | std::ios::binary);
         if (file.is_open()) {
-            char check[3];
-            file.read(check, 2);
-            check[2] = '\0';
+            file.read(reinterpret_cast<char*>(&bm_header), sizeof(BitMapFileHeader));
+            file.read(reinterpret_cast<char*>(&bm_info), sizeof(BitMapInfo));
 
-            if (std::string(check) == "BM") {
-                file.seekg(BM_WIDTH_INDEX);
-                file.read(reinterpret_cast<char*>(&width), sizeof(int));
+            width = bm_info.biWidth;
+            height = bm_info.biHeight;
+            size = bm_info.biSizeImage;
+            bitcount = bm_info.biBitCount;
 
-                file.seekg(BM_HEIGHT_INDEX);
-                file.read(reinterpret_cast<char*>(&height), sizeof(int));
+            raster = new uint8_t*[height];
+            raster[0] = new uint8_t[height * ((width*3) + (width*3)%4)];
+            for (int i = 1; i != height; ++i) {
+                raster[i] = raster[i-1] + ((width*3) + (width*3)%4);
+            }
 
-                file.seekg(BM_BITCOUNT_INDEX);
-                file.read(reinterpret_cast<char*>(&bitcount), sizeof(short));
-
-                size = width * height * bitcount/BYTE_SIZE; // in bytes
-                if (bitcount == 24) {
-                    raster = new uint8_t*[height];
-                    raster[0] = new uint8_t[height * width*3 + (width*3)%4];
-                    for (int i = 1; i != height; ++i) {
-                        raster[i] = raster[i-1] + width*3; //asd
-                    }
-
-                    int BM_IMAGE_INDEX;
-                    file.seekg(BM_OFFBITS_INDEX);
-                    file.read(reinterpret_cast<char*>(&BM_IMAGE_INDEX), sizeof(int));
-                    file.seekg(BM_IMAGE_INDEX);
-                    for (int i = 0; i != height; ++i) {
-                        for (int j = 0; j != width*3 + (width*3)%4; ++j) {
-                            file.read(reinterpret_cast<char*>(&raster[i][j]), 1);
-                        }
-                    }
-                } else {
-                    // TODO there must be dialog with exception (ISN'T BMP FORMAT!!!)
+            file.seekg(bm_header.bfOffBits);
+            for (int i = 0; i != height; ++i) {
+                for (int j = 0; j != width*3 + (width*3)%4; ++j) {
+                    file.read(reinterpret_cast<char*>(&raster[i][j]), 1);
                 }
             }
         }
