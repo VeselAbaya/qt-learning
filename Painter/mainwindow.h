@@ -28,6 +28,8 @@ private slots:
 
     void on_grayscale_button_clicked();
 
+    void on_actionSave_triggered();
+
 private:
     Ui::MainWindow *ui;
     QGraphicsScene* scene;

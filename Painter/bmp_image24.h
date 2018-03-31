@@ -27,23 +27,24 @@ public:
 
     // getters
     int get_size() const;
-    short get_width() const;
-    short get_height() const;
+    int get_width() const;
+    int get_height() const;
     short get_bitcount() const;
 
-    uint8_t* get_raster() const;      // return raster aka byte array
-    QRgb get_rgb(int x, int y) const; // return color from pixel on position (row, column)
-    QImage get_qImage() const;        // return QImage from raster image
-    void invert_color();              // invert whole image
-    void grayscale();                 // convert to grayscale image
+    uint8_t* get_raster() const;            // return raster aka byte
+    uint8_t get_raster(int i, int j) const; // return raster on i-row and j-column
+    QRgb get_rgb(int x, int y) const;       // return color from pixel on position (row, column)
+    QImage get_qImage() const;              // return QImage from raster image
+    void invert_color();                    // invert whole image
+    void grayscale();                       // convert to grayscale image
 
     virtual void invert_color(int x1, int y1, int x2, int y2);
     virtual void grayscale(int x1, int y1, int x2, int y2);
 private:
 
     int size;
-    short height;
-    short width;
+    int height;
+    int width;
     short bitcount; // bits on color
     uint8_t** raster;
 };

@@ -9,6 +9,7 @@
 
 #define BYTE_SIZE 8
 
+#define BM_SIZE_INDEX 2
 #define BM_RESERVED1_INDEX 6
 #define BM_OFFBITS_INDEX 10
 #define BM_WIDTH_INDEX 18
@@ -24,11 +25,12 @@ public:
 
     // getters
     virtual int get_size() const       = 0;
-    virtual short get_height() const   = 0;
-    virtual short get_width() const    = 0;
+    virtual int get_height() const   = 0;
+    virtual int get_width() const    = 0;
     virtual short get_bitcount() const = 0;
 
     virtual uint8_t* get_raster() const      = 0; // return raster aka byte array
+    virtual uint8_t get_raster(int x, int y) const       = 0;
     virtual QRgb get_rgb(int x, int y) const = 0; // return color from pixel on position (row, column)
     virtual QImage get_qImage() const        = 0; // return QImage from raster image
     virtual void invert_color() {}                // invert whole image

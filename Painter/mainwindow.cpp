@@ -1,6 +1,6 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
-
+#include <QDebug>
 MainWindow::MainWindow(QWidget *parent): QMainWindow(parent),
                                          ui(new Ui::MainWindow) {
     ui->setupUi(this);
@@ -23,7 +23,7 @@ void MainWindow::on_actionOpen_triggered() {
             delete bmp_image;
         }
 
-        bmp_image = Bmp::read(file_path.toStdString());
+        bmp_image = Bmp::bmp(file_path.toStdString());
         ui->size->setText(QString::number(bmp_image->get_size()));
         ui->height->setText(QString::number(bmp_image->get_height()));
         ui->width->setText(QString::number(bmp_image->get_width()));
@@ -39,7 +39,7 @@ void MainWindow::on_actionOpen_triggered() {
 
 
 void MainWindow::on_invert_button_clicked() {
-    bmp_image->invert_color(100, 150, 200, 250);
+    bmp_image->invert_color();
     scene->clear();
     scene->addPixmap(QPixmap::fromImage(bmp_image->get_qImage()));
     ui->graphics_view->setScene(scene);
@@ -48,8 +48,7 @@ void MainWindow::on_invert_button_clicked() {
 
 
 void MainWindow::on_grayscale_button_clicked() {
-    bmp_image->grayscale(300, 50, 20, 300);
-//    bmp_image->grayscale();
+    bmp_image->grayscale();
     scene->clear();
     scene->addPixmap(QPixmap::fromImage(bmp_image->get_qImage()));
     ui->graphics_view->setScene(scene);
@@ -57,4 +56,11 @@ void MainWindow::on_grayscale_button_clicked() {
 
 void MainWindow::on_invert_button_clicked(bool checked) {
     // TODO somethig lol :)
+}
+
+void MainWindow::on_actionSave_triggered() {
+    QString file_path = QFileDialog::getSaveFileName(this, "Save a file");
+    if (file_path != "") {
+        Bmp::save(bmp_image, file_path.toStdString());
+    }
 }
