@@ -36,16 +36,12 @@ void MainWindow::on_actionOpen_triggered() {
     }
 }
 
-
-
 void MainWindow::on_invert_button_clicked() {
     bmp_image->invert_color();
     scene->clear();
     scene->addPixmap(QPixmap::fromImage(bmp_image->get_qImage()));
     ui->graphics_view->setScene(scene);
 }
-
-
 
 void MainWindow::on_grayscale_button_clicked() {
     bmp_image->grayscale();

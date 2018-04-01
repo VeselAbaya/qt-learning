@@ -3,6 +3,8 @@
 
 #include "bmp_image.h"
 
+#define ALIGNMENT24(width) ((width)*3)%4
+
 #include <cstdint>   // for uint8_t
 #include <algorithm> // for max, min
 #include <fstream>
@@ -11,7 +13,8 @@
 class Bmp_image24: public Bmp_image {
 public:
     Bmp_image24(std::string file_path);     // Deprecated, better use: Bmp::bmp() from bmp.h
-    Bmp_image24(short width, short height);
+    Bmp_image24(int width, int height);
+    Bmp_image24(int width, int height, uint8_t* raster);
     Bmp_image24(Bmp_image24 const& other);
     Bmp_image24& operator=(Bmp_image24 const& other);
     Bmp_image24(Bmp_image24&& other);
@@ -23,12 +26,12 @@ public:
     void set_color(int x, int y, QColor const& color);
 
     // getters
-    int get_size() const;                   // return size in bytes
+    int get_size() const;                      // return size in bytes
     int get_width() const;
     int get_height() const;
     short get_bitcount() const;
-    uint8_t* get_raster() const;            // return raster like byte array
-    uint8_t get_raster(int i, int j) const; // return raster byte on i-row and j-column
+    uint8_t* get_raster() const; // return raster like byte array
+    uint8_t get_raster(int i, int j) const;    // return raster byte on i-row and j-column
 
     QRgb get_rgb(int x, int y) const;       // return color from pixel on position (row, column)
     QImage get_qImage() const;              // return QImage from raster image

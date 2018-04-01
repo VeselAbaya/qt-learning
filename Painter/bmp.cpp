@@ -79,9 +79,9 @@ void Bmp::save(Bmp_image *image, std::string file_path) {
 
                 // allocation memory for new image
                 uint8_t** saving_raster = new uint8_t*[bm_info.biHeight];
-                saving_raster[0] = new uint8_t[bm_info.biHeight * ((bm_info.biWidth*3) + (bm_info.biWidth*3)%4)];
+                saving_raster[0] = new uint8_t[bm_info.biSizeImage];
                 for (int i = 1; i != bm_info.biHeight; ++i) {
-                    saving_raster[i] = saving_raster[i-1] + (bm_info.biWidth*3) + (bm_info.biWidth*3)%4;
+                    saving_raster[i] = saving_raster[i-1] + (bm_info.biWidth*3) + ALIGNMENT24(bm_info.biWidth);
                 }
 
                 for (int i = 0; i != bm_info.biHeight; ++i) {
@@ -90,12 +90,12 @@ void Bmp::save(Bmp_image *image, std::string file_path) {
                     }
 
                     // alignment
-                    for (int j = bm_info.biWidth*3; j != ((bm_info.biWidth*3) + (bm_info.biWidth*3)%4); ++j) {
+                    for (int j = bm_info.biWidth*3; j != ((bm_info.biWidth*3) + ALIGNMENT24(bm_info.biWidth)); ++j) {
                         saving_raster[i][j] = 0;
                     }
                 }
 
-                file.write(reinterpret_cast<char*>(saving_raster[0]), bm_info.biHeight * ((bm_info.biWidth*3) + (bm_info.biWidth*3)%4));
+                file.write(reinterpret_cast<char*>(saving_raster[0]), bm_info.biHeight * ((bm_info.biWidth*3) + ALIGNMENT24(bm_info.biWidth)));
                 file.close();
 
                 delete [] saving_raster[0];

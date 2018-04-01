@@ -18,14 +18,14 @@ Bmp_image24::Bmp_image24(std::string file_path) {
 
             // allocation memory for raster image
             raster = new uint8_t*[height];
-            raster[0] = new uint8_t[height * ((width*3) + (width*3)%4)];
+            raster[0] = new uint8_t[size];
             for (int i = 1; i != height; ++i) {
-                raster[i] = raster[i-1] + ((width*3) + (width*3)%4);
+                raster[i] = raster[i-1] + ((width*3) + ALIGNMENT24(width));
             }
 
             file.seekg(bm_header.bfOffBits); // here raster starts
             for (int i = 0; i != height; ++i) {
-                for (int j = 0; j != width*3 + (width*3)%4; ++j) {
+                for (int j = 0; j != width*3 + ALIGNMENT24(width); ++j) {
                     file.read(reinterpret_cast<char*>(&raster[i][j]), 1);
                 }
             }
@@ -35,18 +35,44 @@ Bmp_image24::Bmp_image24(std::string file_path) {
     }
 }
 
-Bmp_image24::Bmp_image24(short width, short height): size(width * height * 24/BYTE_SIZE), // 24 - bitcount
-                                                     width(width),
-                                                     height(height),
-                                                     bitcount(24) {
+Bmp_image24::Bmp_image24(int width, int height): size(height * ((width*3) + ALIGNMENT24(width))), // 24 - bitcount
+                                                 width(width),
+                                                 height(height),
+                                                 bitcount(24) {
     // allocation
     raster = new uint8_t*[height];
     raster[0] = new uint8_t[size];
     for (int i = 1; i != height; ++i) {
-        raster[i] = raster[i-1] + ((width*3) + (width*3)%4);
+        raster[i] = raster[i-1] + ((width*3) + ALIGNMENT24(width));
+    }
+
+    for (int i = 0; i != height; ++i) {
         // null init for all bytes in new raster
-        for (int j = 0; j != ((width*3) + (width*3)%4); ++j) {
+        for (int j = 0; j != ((width*3) + ALIGNMENT24(width)); ++j) {
             raster[i][j] = 0;
+        }
+    }
+}
+
+Bmp_image24::Bmp_image24(int width, int height, uint8_t* raster): size(height * ((width*3) + ALIGNMENT24(width))), // 24 - bitcount
+                                                                  width(width),
+                                                                  height(height),
+                                                                  bitcount(24) {
+    this->raster = new uint8_t*[height];
+    this->raster[0] = new uint8_t[size];
+
+    for (int i = 1; i != height; ++i) {
+        this->raster[i] = this->raster[i-1] + ((width*3) + ALIGNMENT24(width));
+    }
+
+    for (int i = 0; i != height; ++i) {
+        for (int j = 0; j != (width*3); ++j) {
+            this->raster[i][j] = raster[i*(width*3) + j];
+        }
+
+        // alignment
+        for (int j = width*3; j != (width*3) + ALIGNMENT24(width); ++j) {
+            this->raster[i][j] = 0;
         }
     }
 }
@@ -59,13 +85,13 @@ Bmp_image24::Bmp_image24(Bmp_image24 const& other) {
 
     // allocation
     raster = new uint8_t*[height];
-    raster[0] = new uint8_t[height * ((width*3) + (width*3)%4)];
+    raster[0] = new uint8_t[size];
     for (int i = 1; i != height; ++i) {
-        raster[i] = raster[i-1] + ((width*3) + (width*3)%4);
+        raster[i] = raster[i-1] + ((width*3) + ALIGNMENT24(width));
     }
 
     for (int i = 0; i != height; ++i) {
-        for (int j = 0; j != (width*3) + (width*3)%4; ++j) {
+        for (int j = 0; j != (width*3) + ALIGNMENT24(width); ++j) {
             raster[i][j] = other.raster[i][j];
         }
     }
@@ -85,7 +111,7 @@ Bmp_image24& Bmp_image24::operator=(Bmp_image24 const& other) {
     raster = new uint8_t*[other.get_height()];
     raster[0] = new uint8_t[other.get_size()];
     for (int i = 0; i != height; ++i) {
-        for (int j = 0; j != (width*3) + (width*3)%4; ++j) {
+        for (int j = 0; j != (width*3) + ALIGNMENT24(width); ++j) {
             raster[i][j] = other.raster[i][j];
         }
     }
@@ -109,7 +135,7 @@ Bmp_image24::Bmp_image24(Bmp_image24&& other): size(other.size),
     raster = new uint8_t*[other.get_height()];
     raster[0] = new uint8_t[other.get_size()];
     for (int i = 0; i != height; ++i) {
-        for (int j = 0; j != (width*3) + (width*3)%4; ++j) {
+        for (int j = 0; j != (width*3) + ALIGNMENT24(width); ++j) {
             raster[i][j] = other.raster[i][j];
         }
     }
@@ -136,7 +162,7 @@ Bmp_image24& Bmp_image24::operator=(Bmp_image24&& other) {
     raster = new uint8_t*[other.get_height()];
     raster[0] = new uint8_t[other.get_size()];
     for (int i = 0; i != height; ++i) {
-        for (int j = 0; j != (width*3) + (width*3)%4; ++j) {
+        for (int j = 0; j != (width*3) + ALIGNMENT24(width); ++j) {
             raster[i][j] = other.raster[i][j];
         }
     }
@@ -177,10 +203,12 @@ short Bmp_image24::get_bitcount() const {
 }
 
 uint8_t* Bmp_image24::get_raster() const {
-    uint8_t* copy = new uint8_t[height * width*3];
-
-    for (int i = 0; i != height * width*3; ++i) {
-        copy[i] = *raster[i];
+    uint8_t* copy;
+    copy = new uint8_t[height * width*3];
+    for (int i = 0; i != height; ++i) {
+        for (int j = 0; j != width*3; ++j) {
+            copy[i*(width*3) + j] = raster[i][j];
+        }
     }
 
     return copy;
@@ -209,7 +237,7 @@ QImage Bmp_image24::get_qImage() const {
 
 void Bmp_image24::invert_color() {
     for (int i = 0; i != height; ++i) {
-        for (int j = 0; j != (width*3) + (width*3)%4; ++j) {
+        for (int j = 0; j != (width*3) + ALIGNMENT24(width); ++j) {
             raster[i][j] = 255 - raster[i][j];
         }
     }
@@ -217,7 +245,7 @@ void Bmp_image24::invert_color() {
 
 void Bmp_image24::grayscale() {
     for (int i = 0; i != height; ++i) {
-        for (int j = 0; j < (width*3) + (width*3)%4; j+=3) {
+        for (int j = 0; j < (width*3) + ALIGNMENT24(width); j+=3) {
             unsigned avg = (raster[i][j] + raster[i][j+1] + raster[i][j+2]) / 3;
             raster[i][j]   = static_cast<uint8_t>(avg);
             raster[i][j+1] = static_cast<uint8_t>(avg);
