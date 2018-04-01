@@ -1,5 +1,4 @@
 #include "bmp_image24.h"
-#include <QDebug>
 
 Bmp_image24::Bmp_image24(std::string file_path) {
     if (file_path != "") {
@@ -12,18 +11,19 @@ Bmp_image24::Bmp_image24(std::string file_path) {
             file.read(reinterpret_cast<char*>(&bm_header), sizeof(BitMapFileHeader));
             file.read(reinterpret_cast<char*>(&bm_info), sizeof(BitMapInfo));
 
-            width = bm_info.biWidth;
-            height = bm_info.biHeight;
-            size = bm_info.biSizeImage;
+            width    = bm_info.biWidth;
+            height   = bm_info.biHeight;
+            size     = bm_info.biSizeImage;
             bitcount = bm_info.biBitCount;
 
+            // allocation memory for raster image
             raster = new uint8_t*[height];
             raster[0] = new uint8_t[height * ((width*3) + (width*3)%4)];
             for (int i = 1; i != height; ++i) {
                 raster[i] = raster[i-1] + ((width*3) + (width*3)%4);
             }
 
-            file.seekg(bm_header.bfOffBits);
+            file.seekg(bm_header.bfOffBits); // here raster starts
             for (int i = 0; i != height; ++i) {
                 for (int j = 0; j != width*3 + (width*3)%4; ++j) {
                     file.read(reinterpret_cast<char*>(&raster[i][j]), 1);
@@ -35,32 +35,42 @@ Bmp_image24::Bmp_image24(std::string file_path) {
     }
 }
 
+Bmp_image24::Bmp_image24(short width, short height): size(width * height * 24/BYTE_SIZE), // 24 - bitcount
+                                                     width(width),
+                                                     height(height),
+                                                     bitcount(24) {
+    // allocation
+    raster = new uint8_t*[height];
+    raster[0] = new uint8_t[size];
+    for (int i = 1; i != height; ++i) {
+        raster[i] = raster[i-1] + ((width*3) + (width*3)%4);
+        // null init for all bytes in new raster
+        for (int j = 0; j != ((width*3) + (width*3)%4); ++j) {
+            raster[i][j] = 0;
+        }
+    }
+}
+
 Bmp_image24::Bmp_image24(Bmp_image24 const& other) {
     size     = other.size;
     width    = other.width;
     height   = other.height;
     bitcount = other.bitcount;
 
-    raster = new uint8_t*[other.get_height()];
-    raster[0] = new uint8_t[other.get_size()];
+    // allocation
+    raster = new uint8_t*[height];
+    raster[0] = new uint8_t[height * ((width*3) + (width*3)%4)];
+    for (int i = 1; i != height; ++i) {
+        raster[i] = raster[i-1] + ((width*3) + (width*3)%4);
+    }
+
     for (int i = 0; i != height; ++i) {
-        raster[i] = new uint8_t[width*3];
         for (int j = 0; j != (width*3) + (width*3)%4; ++j) {
             raster[i][j] = other.raster[i][j];
         }
     }
 }
 
-Bmp_image24::Bmp_image24(short width, short height): size(width * height * 24/BYTE_SIZE), // 24 - bitcount
-                                                     height(height),
-                                                     width(width),
-                                                     bitcount(24) {
-    raster = new uint8_t*[height];
-    raster[0] = new uint8_t[height * width*3];
-    for (int i = 1; i != height; ++i) {
-        raster[i] = raster[i-1] + width*3;
-    }
-}
 
 Bmp_image24& Bmp_image24::operator=(Bmp_image24 const& other) {
     delete [] raster;
@@ -71,6 +81,7 @@ Bmp_image24& Bmp_image24::operator=(Bmp_image24 const& other) {
     height   = other.height;
     bitcount = other.bitcount;
 
+    // allocation
     raster = new uint8_t*[other.get_height()];
     raster[0] = new uint8_t[other.get_size()];
     for (int i = 0; i != height; ++i) {
@@ -82,16 +93,28 @@ Bmp_image24& Bmp_image24::operator=(Bmp_image24 const& other) {
     return *this;
 }
 
+//-///////////////////////////////////////////////////////////
+// displacement
+
 Bmp_image24::Bmp_image24(Bmp_image24&& other): size(other.size),
-                                               height(other.height),
                                                width(other.width),
-                                               bitcount(other.bitcount),
-                                               raster(other.raster) { // TODO need to realloc raster (?)
+                                               height(other.height),
+                                               bitcount(other.bitcount) {
     other.size     = 0;
     other.width    = 0;
     other.height   = 0;
     other.bitcount = 0;
-    other.raster   = nullptr;
+
+    // allocation
+    raster = new uint8_t*[other.get_height()];
+    raster[0] = new uint8_t[other.get_size()];
+    for (int i = 0; i != height; ++i) {
+        for (int j = 0; j != (width*3) + (width*3)%4; ++j) {
+            raster[i][j] = other.raster[i][j];
+        }
+    }
+
+    other.raster = nullptr;
 }
 
 Bmp_image24& Bmp_image24::operator=(Bmp_image24&& other) {
@@ -108,8 +131,17 @@ Bmp_image24& Bmp_image24::operator=(Bmp_image24&& other) {
     other.width    = 0;
     other.height   = 0;
     other.bitcount = 0;
-    other.raster   = nullptr;
 
+    // allocation
+    raster = new uint8_t*[other.get_height()];
+    raster[0] = new uint8_t[other.get_size()];
+    for (int i = 0; i != height; ++i) {
+        for (int j = 0; j != (width*3) + (width*3)%4; ++j) {
+            raster[i][j] = other.raster[i][j];
+        }
+    }
+
+    other.raster = nullptr;
     return *this;
 }
 
@@ -125,6 +157,8 @@ void Bmp_image24::set_color(int x, int y, QColor const& color) {
     raster[y][x+1] = color.green();
     raster[y][x+2] = color.red();
 }
+
+//-///////////////////////////////////////////////////////////
 
 int Bmp_image24::get_size() const {
     return size;
@@ -161,7 +195,7 @@ QRgb Bmp_image24::get_rgb(int x, int y) const {
 }
 
 QImage Bmp_image24::get_qImage() const {
-    QImage image(width, height, QImage::Format_RGB888);
+    QImage image(width, height, QImage::Format_RGB888); // this format for 24-bitcount (8,8,8)
     for (int i = 0; i != height; ++i) {
         for (int j = width-1; j >= 0; --j) {
             image.setPixelColor(j, i, QColor(this->get_rgb(j, i)));
@@ -170,6 +204,8 @@ QImage Bmp_image24::get_qImage() const {
 
     return image;
 }
+
+//-///////////////////////////////////////////////////////////
 
 void Bmp_image24::invert_color() {
     for (int i = 0; i != height; ++i) {
@@ -182,8 +218,8 @@ void Bmp_image24::invert_color() {
 void Bmp_image24::grayscale() {
     for (int i = 0; i != height; ++i) {
         for (int j = 0; j < (width*3) + (width*3)%4; j+=3) {
-            int avg = (raster[i][j] + raster[i][j+1] + raster[i][j+2]) / 3;
-            raster[i][j] = static_cast<uint8_t>(avg);
+            unsigned avg = (raster[i][j] + raster[i][j+1] + raster[i][j+2]) / 3;
+            raster[i][j]   = static_cast<uint8_t>(avg);
             raster[i][j+1] = static_cast<uint8_t>(avg);
             raster[i][j+2] = static_cast<uint8_t>(avg);
         }
@@ -191,6 +227,7 @@ void Bmp_image24::grayscale() {
 }
 
 void Bmp_image24::invert_color(int x1, int y1, int x2, int y2) {
+    // find upper left and lower right corners coordinates
     int x_min = std::min(x1, x2);
     int y_min = std::min(y1, y2);
     int x_max = std::max(x1, x2);
@@ -204,6 +241,7 @@ void Bmp_image24::invert_color(int x1, int y1, int x2, int y2) {
 }
 
 void Bmp_image24::grayscale(int x1, int y1, int x2, int y2) {
+    // find upper left and lower right corners coordinates
     int x_min = std::min(x1, x2);
     int y_min = std::min(y1, y2);
     int x_max = std::max(x1, x2);
@@ -211,7 +249,7 @@ void Bmp_image24::grayscale(int x1, int y1, int x2, int y2) {
 
     for (int y = y_min; y != y_max; ++y) {
         for (int x = x_min; x < x_max; x+=3) {
-            int avg = (raster[y][x] + raster[y][x+1] + raster[y][x+2]) / 3;
+            unsigned avg = (raster[y][x] + raster[y][x+1] + raster[y][x+2]) / 3;
             raster[y][x] = static_cast<uint8_t>(avg);
             raster[y][x+1] = static_cast<uint8_t>(avg);
             raster[y][x+2] = static_cast<uint8_t>(avg);

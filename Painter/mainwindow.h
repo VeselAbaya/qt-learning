@@ -22,8 +22,6 @@ public:
 private slots:
     void on_actionOpen_triggered();
 
-    void on_invert_button_clicked(bool checked);
-
     void on_invert_button_clicked();
 
     void on_grayscale_button_clicked();
@@ -31,7 +29,7 @@ private slots:
     void on_actionSave_triggered();
 
 private:
-    Ui::MainWindow *ui;
+    Ui::MainWindow* ui;
     QGraphicsScene* scene;
     Bmp_image* bmp_image;
 };

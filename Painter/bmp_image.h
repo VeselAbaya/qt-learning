@@ -5,15 +5,8 @@
 #include <QColor>
 #include <QImage>
 
-#include <string>
-
 #define BYTE_SIZE 8
 
-#define BM_SIZE_INDEX 2
-#define BM_RESERVED1_INDEX 6
-#define BM_OFFBITS_INDEX 10
-#define BM_WIDTH_INDEX 18
-#define BM_HEIGHT_INDEX 22
 #define BM_BITCOUNT_INDEX 28
 
 #pragma pack(push, 1)

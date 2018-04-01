@@ -18,7 +18,7 @@ MainWindow::~MainWindow() {
 void MainWindow::on_actionOpen_triggered() {
     QString file_path = QFileDialog::getOpenFileName(this, "Open a file");
     if (!file_path.isEmpty()) {
-        if (bmp_image) {
+        if (bmp_image) { // need to delete prev image from scene before uploading next
             scene->clear();
             delete bmp_image;
         }
@@ -52,10 +52,6 @@ void MainWindow::on_grayscale_button_clicked() {
     scene->clear();
     scene->addPixmap(QPixmap::fromImage(bmp_image->get_qImage()));
     ui->graphics_view->setScene(scene);
-}
-
-void MainWindow::on_invert_button_clicked(bool checked) {
-    // TODO somethig lol :)
 }
 
 void MainWindow::on_actionSave_triggered() {
