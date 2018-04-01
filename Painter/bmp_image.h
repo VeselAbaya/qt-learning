@@ -5,6 +5,8 @@
 #include <QColor>
 #include <QImage>
 
+#include <memory>
+
 #define BYTE_SIZE 8
 
 #define BM_BITCOUNT_INDEX 28
@@ -51,11 +53,11 @@ public:
     virtual uint8_t get_raster(int x, int y) const = 0;
     virtual QRgb get_rgb(int x, int y) const       = 0; // return color from pixel on position (row, column)
     virtual QImage get_qImage() const              = 0; // return QImage from raster image
-    virtual void invert_color() {}                      // invert whole image
-    virtual void grayscale() {}                         // convert to grayscale image
+    virtual std::shared_ptr<Bmp_image> invert_color() = 0;                      // invert whole image
+    virtual void grayscale() = 0                         ;// convert to grayscale image
 
-    virtual void invert_color(int x1, int y1, int x2, int y2) {}
-    virtual void grayscale(int x1, int y1, int x2, int y2) {}
+    virtual void invert_color(int x1, int y1, int x2, int y2) = 0;
+    virtual void grayscale(int x1, int y1, int x2, int y2)    = 0;
 };
 
 #endif // BMP_IMAGE_H

@@ -248,7 +248,7 @@ std::shared_ptr<Bmp_image> Bmp_image24::invert_color() {
         }
     }
 
-    ret = std::make_shared<Bmp_image>(new Bmp_image24(width, height, invert_raster));
+    ret.reset(new Bmp_image24(width, height, invert_raster));
     delete [] invert_raster;
     return ret;
 }
