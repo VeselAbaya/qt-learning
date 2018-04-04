@@ -13,7 +13,7 @@
 class Bmp_image24: public Bmp_image {
 public:
     Bmp_image24(std::string file_path);     // Deprecated, better use: Bmp::bmp() from bmp.h
-    Bmp_image24(int width, int height);
+    Bmp_image24(int width, int height);     // new "white" image
     Bmp_image24(int width, int height, uint8_t* raster);
     Bmp_image24(Bmp_image24 const& other);
     Bmp_image24& operator=(Bmp_image24 const& other);

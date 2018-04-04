@@ -4,11 +4,13 @@
 #include "bmp.h"
 
 #include <QMainWindow>
+#include <QSettings>
 #include <QFileDialog>
 #include <QGraphicsScene>
 #include <QPixmap>
 #include <QImage>
 #include <QString>
+#include <QCloseEvent>
 
 namespace Ui { class MainWindow; }
 
@@ -20,18 +22,33 @@ public:
     ~MainWindow();
 
 private slots:
+    void read_settings();  // read config (size and position of window, path to last opened image)
+    void write_settings(); // write this config
+    void closeEvent(QCloseEvent* event);
+
     void on_actionOpen_triggered();
 
-    void on_invert_button_clicked();
-
-    void on_grayscale_button_clicked();
-
     void on_actionSave_triggered();
+
+    void on_actionSave_As_triggered();
+
+    void on_actioncoordinates_gray_triggered();
+
+    void on_actioncoordinates_invert_triggered();
+
+    void on_actionGraysacle_triggered();
+
+    void on_actionInvert_triggered();
+
+    void on_actionQuit_triggered();
+
+    void on_actionNew_triggered();
 
 private:
     Ui::MainWindow* ui;
     QGraphicsScene* scene;
     Bmp_image* bmp_image;
+    QString open_file_path;
 };
 
 #endif // MAINWINDOW_H

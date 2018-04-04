@@ -49,7 +49,7 @@ Bmp_image24::Bmp_image24(int width, int height): size(height * ((width*3) + ALIG
     for (int i = 0; i != height; ++i) {
         // null init for all bytes in new raster
         for (int j = 0; j != ((width*3) + ALIGNMENT24(width)); ++j) {
-            raster[i][j] = 0;
+            raster[i][j] = 255;
         }
     }
 }

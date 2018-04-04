@@ -10,6 +10,8 @@
 namespace Bmp {
     Bmp_image* bmp(std::string file_path);
     Bmp_image* copy(Bmp_image* image);
+    Bmp_image* create(int width, int height); // Create new bmp "white" image in 24-bitcount
+
     void save(Bmp_image* image, std::string file_path="");
 }
 

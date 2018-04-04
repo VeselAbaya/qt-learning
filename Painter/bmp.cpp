@@ -44,6 +44,11 @@ Bmp_image* Bmp::copy(Bmp_image *image) { // TODO maybe need to think about some 
     return copy;
 }
 
+Bmp_image* Bmp::create(int width, int height) {
+    Bmp_image* image = new Bmp_image24(width, height);
+    return image;
+}
+
 void Bmp::save(Bmp_image *image, std::string file_path) {
     std::ofstream file;
     file.open(file_path, std::ios::out | std::ios::binary);
