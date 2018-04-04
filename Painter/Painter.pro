@@ -36,4 +36,5 @@ HEADERS += \
     bmp.h
 
 FORMS += \
-        mainwindow.ui
+        mainwindow.ui \
+    savebeforequit.ui

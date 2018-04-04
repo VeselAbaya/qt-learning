@@ -245,11 +245,11 @@ void Bmp_image24::invert_color() {
 
 void Bmp_image24::grayscale() {
     for (int i = 0; i != height; ++i) {
-        for (int j = 0; j < (width*3) + ALIGNMENT24(width); j+=3) {
-            unsigned avg = (raster[i][j] + raster[i][j+1] + raster[i][j+2]) / 3;
-            raster[i][j]   = static_cast<uint8_t>(avg);
-            raster[i][j+1] = static_cast<uint8_t>(avg);
-            raster[i][j+2] = static_cast<uint8_t>(avg);
+        for (int j = 0; j < (width*3) + ALIGNMENT24(width) - 3; j+=3) {
+            double luma = 0.2126*raster[i][j] + 0.7152*raster[i][j+1] + 0.0722*raster[i][j+2]; // https://habrahabr.ru/post/304210/﻿
+            raster[i][j] = static_cast<uint8_t>(luma);
+            raster[i][j+1] = static_cast<uint8_t>(luma);
+            raster[i][j+2] = static_cast<uint8_t>(luma);
         }
     }
 }
@@ -277,10 +277,10 @@ void Bmp_image24::grayscale(int x1, int y1, int x2, int y2) {
 
     for (int y = y_min; y != y_max; ++y) {
         for (int x = x_min; x < x_max; x+=3) {
-            unsigned avg = (raster[y][x] + raster[y][x+1] + raster[y][x+2]) / 3;
-            raster[y][x] = static_cast<uint8_t>(avg);
-            raster[y][x+1] = static_cast<uint8_t>(avg);
-            raster[y][x+2] = static_cast<uint8_t>(avg);
+            double luma = 0.2126*raster[y][x] + 0.7152*raster[y][x+1] + 0.0722*raster[y][x+2]; // https://habrahabr.ru/post/304210/﻿
+            raster[y][x] = static_cast<uint8_t>(luma);
+            raster[y][x+1] = static_cast<uint8_t>(luma);
+            raster[y][x+2] = static_cast<uint8_t>(luma);
         }
     }
 }

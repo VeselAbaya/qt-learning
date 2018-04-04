@@ -21,7 +21,13 @@ Bmp_image* Bmp::bmp(std::string file_path) {
                 Bmp_image* bmp_image;
                 switch(static_cast<int>(bitcount)) {
                     case 24: bmp_image = new Bmp_image24(file_path); break; // There 2 files are reading from two functions (need to fix!)
-                    default: bmp_image = nullptr;
+                    default:
+                        QMessageBox msg_box;
+                        msg_box.setText("This version supports only 24 bitcount\n"
+                                        "this image bitcount: " + QString::number(bitcount));
+                        msg_box.exec();
+
+                        bmp_image = nullptr;
                 }
 
                 return bmp_image;
@@ -38,7 +44,7 @@ Bmp_image* Bmp::copy(Bmp_image *image) { // TODO maybe need to think about some 
     switch(image->get_bitcount()) {
         case 24: copy = new Bmp_image24(*static_cast<Bmp_image24*>(image)); break; // Bmp_image24's copy const
         // there is no default case because all Bmp_image classes support the invariant
-        // (here can't be incottect bitcount)
+        // (here can't be incorrect bitcount)
     }
 
     return copy;
@@ -107,7 +113,7 @@ void Bmp::save(Bmp_image *image, std::string file_path) {
                 delete [] saving_raster;
             break;
             // there is no default case because all Bmp_image classes support the invariant
-            // (here can't be incottect bitcount)
+            // (here can't be incorrect bitcount)
         }
     }
 }

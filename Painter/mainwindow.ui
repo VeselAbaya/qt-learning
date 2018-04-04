@@ -130,10 +130,16 @@ color: white;</string>
    <property name="text">
     <string>Grayscale</string>
    </property>
+   <property name="shortcut">
+    <string>Ctrl+G</string>
+   </property>
   </action>
   <action name="actionInvert">
    <property name="text">
     <string>Invert color</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+I</string>
    </property>
   </action>
  </widget>
