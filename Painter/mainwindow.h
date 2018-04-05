@@ -2,6 +2,7 @@
 #define MAINWINDOW_H
 
 #include "bmp.h"
+#include "save_quit_dialog.h"
 
 #include <QMainWindow>
 #include <QSettings>
@@ -25,6 +26,7 @@ private slots:
     void read_settings();  // read config (size and position of window, path to last opened image)
     void write_settings(); // write this config
     void closeEvent(QCloseEvent* event);
+    bool cancel_toggle();
 
     void on_actionOpen_triggered();
 
@@ -49,6 +51,8 @@ private:
     QGraphicsScene* scene;
     Bmp_image* bmp_image;
     QString open_file_path;
+
+    bool cancel_clicked;
 };
 
 #endif // MAINWINDOW_H

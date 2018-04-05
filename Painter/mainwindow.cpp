@@ -7,8 +7,10 @@ MainWindow::MainWindow(QWidget *parent): QMainWindow(parent),
     ui->graphics_view->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     ui->graphics_view->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     setCentralWidget(ui->graphics_view);
+
     scene = new QGraphicsScene();
     bmp_image = nullptr;
+    cancel_clicked = false;
 
     read_settings();
 }
@@ -72,13 +74,28 @@ void MainWindow::on_actionInvert_triggered() {
 }
 
 void MainWindow::on_actionQuit_triggered() {
-    write_settings();
-    this->close();
+    close();
 }
 
 void MainWindow::closeEvent(QCloseEvent *event) {
+    Save_quit_dialog* dialog = new Save_quit_dialog(this);
+    connect(dialog, SIGNAL(save_button_clicked()), this, SLOT(on_actionSave_triggered()));
+    connect(dialog, SIGNAL(cancel_button_clicked(bool)), this, SLOT(cancel_toggle()));
+    dialog->exec();
+    delete dialog;
+
     write_settings();
-    event->accept();
+    if (cancel_clicked) {
+        event->ignore();
+        cancel_clicked = false;
+    } else {
+        event->accept();
+    }
+}
+
+bool MainWindow::cancel_toggle() {
+    return cancel_clicked = true;
+
 }
 
 void MainWindow::on_actionNew_triggered() {
