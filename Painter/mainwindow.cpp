@@ -8,7 +8,7 @@ MainWindow::MainWindow(QWidget *parent): QMainWindow(parent),
     ui->graphics_view->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     setCentralWidget(ui->graphics_view);
 
-    scene = new QGraphicsScene();
+    scene = new My_graphics_scene();
     bmp_image = nullptr;
     cancel_clicked = false;
 
@@ -27,7 +27,7 @@ void MainWindow::on_actionOpen_triggered() {
 
             // some crutch to align center new image :(
             delete scene; //                         :(
-            scene = new QGraphicsScene; //           :(
+            scene = new My_graphics_scene; //           :(
             // some crutch to align center new image :(
 
             delete bmp_image;
@@ -52,15 +52,31 @@ void MainWindow::on_actionSave_As_triggered() {
 }
 
 void MainWindow::on_actioncoordinates_gray_triggered() {
+    int x1 = scene->get_first().x();
+    int y1 = scene->get_first().y();
+    int x2 = scene->get_last().x();
+    int y2 = scene->get_last().y();
 
+    bmp_image->grayscale(x1, y1, x2, y2);
+    scene->clear();
+    scene->addPixmap(QPixmap::fromImage(bmp_image->get_qImage()));
+    ui->graphics_view->setScene(scene);
 }
 
 void MainWindow::on_actioncoordinates_invert_triggered() {
+    int x1 = scene->get_first().x();
+    int y1 = scene->get_first().y();
+    int x2 = scene->get_last().x();
+    int y2 = scene->get_last().y();
 
+    bmp_image->invert_color(x1, y1, x2, y2);
+    scene->clear();
+    scene->addPixmap(QPixmap::fromImage(bmp_image->get_qImage()));
+    ui->graphics_view->setScene(scene);
 }
 
 void MainWindow::on_actionGraysacle_triggered() {
-    bmp_image->grayscale();
+    bmp_image->grayscale(185, 398, 775, 245);
     scene->clear();
     scene->addPixmap(QPixmap::fromImage(bmp_image->get_qImage()));
     ui->graphics_view->setScene(scene);

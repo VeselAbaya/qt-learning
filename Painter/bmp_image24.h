@@ -33,10 +33,10 @@ public:
     uint8_t* get_raster() const; // return raster like byte array
     uint8_t get_raster(int i, int j) const;    // return raster byte on i-row and j-column
 
-    QRgb get_rgb(int x, int y) const;       // return color from pixel on position (row, column)
-    QImage get_qImage() const;              // return QImage from raster image
-    void invert_color();                    // invert whole image
-    void grayscale();                       // convert to grayscale image
+    QColor get_color(int x, int y) const;       // return color from pixel on position (row, column)
+    QImage get_qImage() const;                  // return QImage from raster image
+    void invert_color();                        // invert whole image
+    void grayscale();                           // convert to grayscale image
 
     virtual void invert_color(int x1, int y1, int x2, int y2); // invert only rectangle
     virtual void grayscale(int x1, int y1, int x2, int y2);    // grayscale only rectangle

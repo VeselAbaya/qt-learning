@@ -28,14 +28,16 @@ SOURCES += \
         mainwindow.cpp \
     bmp_image24.cpp \
     bmp.cpp \
-    save_quit_dialog.cpp
+    save_quit_dialog.cpp \
+    my_graphics_scene.cpp
 
 HEADERS += \
         mainwindow.h \
     bmp_image24.h \
     bmp_image.h \
     bmp.h \
-    save_quit_dialog.h
+    save_quit_dialog.h \
+    my_graphics_scene.h
 
 FORMS += \
         mainwindow.ui \

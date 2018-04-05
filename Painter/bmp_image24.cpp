@@ -1,5 +1,5 @@
 #include "bmp_image24.h"
-
+#include <QDebug>
 Bmp_image24::Bmp_image24(std::string file_path) {
     if (file_path != "") {
         BitMapFileHeader bm_header;
@@ -179,9 +179,9 @@ Bmp_image24::~Bmp_image24() {
 //-///////////////////////////////////////////////////////////
 
 void Bmp_image24::set_color(int x, int y, QColor const& color) {
-    raster[y][x]   = color.blue();
-    raster[y][x+1] = color.green();
-    raster[y][x+2] = color.red();
+    raster[height-y-1][x*3]   = color.blue(); // this magic because of invert order in bmp raster
+    raster[height-y-1][x*3+1] = color.green();
+    raster[height-y-1][x*3+2] = color.red();
 }
 
 //-///////////////////////////////////////////////////////////
@@ -218,15 +218,15 @@ uint8_t Bmp_image24::get_raster(int i, int j) const {
     return raster[i][j];
 }
 
-QRgb Bmp_image24::get_rgb(int x, int y) const {
-    return qRgb(raster[height-y-1][x*3 + 2], raster[height-y-1][x*3 + 1], raster[height-y-1][x*3]);
+QColor Bmp_image24::get_color(int x, int y) const {
+    return qRgb(raster[height-y-1][x*3 + 2], raster[height-y-1][x*3 + 1], raster[height-y-1][x*3]); // this magic because of invert order in bmp raster
 }
 
 QImage Bmp_image24::get_qImage() const {
     QImage image(width, height, QImage::Format_RGB888); // this format for 24-bitcount (8,8,8)
     for (int i = 0; i != height; ++i) {
         for (int j = width-1; j >= 0; --j) {
-            image.setPixelColor(j, i, QColor(this->get_rgb(j, i)));
+            image.setPixelColor(j, i, this->get_color(j, i));
         }
     }
 
@@ -254,6 +254,7 @@ void Bmp_image24::grayscale() {
     }
 }
 
+// TODO fix bug with coordinates out of image
 void Bmp_image24::invert_color(int x1, int y1, int x2, int y2) {
     // find upper left and lower right corners coordinates
     int x_min = std::min(x1, x2);
@@ -263,7 +264,9 @@ void Bmp_image24::invert_color(int x1, int y1, int x2, int y2) {
 
     for (int y = y_min; y != y_max; ++y) {
         for (int x = x_min; x != x_max; ++x) {
-            this->set_color(x, y, QColor(255 - raster[y][x+2], 255 - raster[y][x+1], 255 - raster[y][x]));
+            this->set_color(x, y, QColor(255 - raster[height-y-1][x*3+2], // this magic because of invert order in bmp raster
+                                         255 - raster[height-y-1][x*3+1],
+                                         255 - raster[height-y-1][x*3]));
         }
     }
 }
@@ -276,11 +279,10 @@ void Bmp_image24::grayscale(int x1, int y1, int x2, int y2) {
     int y_max = std::max(y1, y2);
 
     for (int y = y_min; y != y_max; ++y) {
-        for (int x = x_min; x < x_max; x+=3) {
-            double luma = 0.2126*raster[y][x] + 0.7152*raster[y][x+1] + 0.0722*raster[y][x+2]; // https://habrahabr.ru/post/304210/﻿
-            raster[y][x] = static_cast<uint8_t>(luma);
-            raster[y][x+1] = static_cast<uint8_t>(luma);
-            raster[y][x+2] = static_cast<uint8_t>(luma);
+        for (int x = x_min; x != x_max; ++x) {
+            QColor rgb = get_color(x, y);
+            uint8_t luma = 0.2126*rgb.red() + 0.7152*rgb.green() + 0.0722*rgb.blue(); // https://habrahabr.ru/post/304210/﻿
+            set_color(x, y, QColor(luma, luma, luma));
         }
     }
 }

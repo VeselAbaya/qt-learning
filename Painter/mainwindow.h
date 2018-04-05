@@ -3,6 +3,7 @@
 
 #include "bmp.h"
 #include "save_quit_dialog.h"
+#include "my_graphics_scene.h"
 
 #include <QMainWindow>
 #include <QSettings>
@@ -48,7 +49,7 @@ private slots:
 
 private:
     Ui::MainWindow* ui;
-    QGraphicsScene* scene;
+    My_graphics_scene* scene;
     Bmp_image* bmp_image;
     QString open_file_path;
 

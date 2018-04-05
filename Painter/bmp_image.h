@@ -1,7 +1,6 @@
 #ifndef BMP_IMAGE_H
 #define BMP_IMAGE_H
 
-#include <QRgb>
 #include <QColor>
 #include <QImage>
 
@@ -49,7 +48,7 @@ public:
 
     virtual uint8_t* get_raster() const            = 0; // return raster aka byte array
     virtual uint8_t get_raster(int x, int y) const = 0;
-    virtual QRgb get_rgb(int x, int y) const       = 0; // return color from pixel on position (row, column)
+    virtual QColor get_color(int x, int y) const       = 0; // return color from pixel on position (row, column)
     virtual QImage get_qImage() const              = 0; // return QImage from raster image
     virtual void invert_color() {}                      // invert whole image
     virtual void grayscale() {}                         // convert to grayscale image

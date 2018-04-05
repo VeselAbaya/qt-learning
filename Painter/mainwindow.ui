@@ -18,9 +18,9 @@
     <property name="geometry">
      <rect>
       <x>0</x>
-      <y>-30</y>
-      <width>942</width>
-      <height>641</height>
+      <y>0</y>
+      <width>941</width>
+      <height>613</height>
      </rect>
     </property>
    </widget>
@@ -117,6 +117,9 @@ color: white;</string>
    <property name="iconText">
     <string>Graysacle</string>
    </property>
+   <property name="toolTip">
+    <string>Choose area on image</string>
+   </property>
   </action>
   <action name="actioncoordinates_invert">
    <property name="text">
@@ -124,6 +127,9 @@ color: white;</string>
    </property>
    <property name="iconText">
     <string>Invert color</string>
+   </property>
+   <property name="toolTip">
+    <string>Choose area on image</string>
    </property>
   </action>
   <action name="actionGraysacle">
