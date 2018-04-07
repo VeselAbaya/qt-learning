@@ -58,8 +58,8 @@
   </widget>
   <widget class="QToolBar" name="mainToolBar">
    <property name="styleSheet">
-    <string notr="true">background-color: rgb(75, 75, 75);
-color: white;</string>
+    <string notr="true">color: white;
+background-color: rgb(75, 75, 75);</string>
    </property>
    <attribute name="toolBarArea">
     <enum>LeftToolBarArea</enum>

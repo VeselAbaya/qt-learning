@@ -9,14 +9,36 @@ MainWindow::MainWindow(QWidget *parent): QMainWindow(parent),
     setCentralWidget(ui->graphics_view);
 
     scene = new My_graphics_scene();
+    connect(scene, SIGNAL(mouseReleased()), this, SLOT(mouseReleased()));
+
     bmp_image = nullptr;
+    grayscale_clicked = false;
+    invert_clicked = false;
     cancel_clicked = false;
+
 
     read_settings();
 }
 
 MainWindow::~MainWindow() {
     delete ui;
+}
+
+void MainWindow::mouseReleased() {
+    int x1 = scene->get_first().x();
+    int y1 = scene->get_first().y();
+    int y2 = scene->get_last().y();
+    int x2 = scene->get_last().x();
+
+    if (grayscale_clicked) {
+        bmp_image->grayscale(x1, y1, x2, y2);
+    } else if (invert_clicked) {
+        bmp_image->invert_color(x1, y1, x2, y2);
+    }
+
+    scene->clear();
+    scene->addPixmap(QPixmap::fromImage(bmp_image->get_qImage()));
+    ui->graphics_view->setScene(scene);
 }
 
 void MainWindow::on_actionOpen_triggered() {
@@ -27,7 +49,7 @@ void MainWindow::on_actionOpen_triggered() {
 
             // some crutch to align center new image :(
             delete scene; //                         :(
-            scene = new My_graphics_scene; //           :(
+            scene = new My_graphics_scene; //        :(
             // some crutch to align center new image :(
 
             delete bmp_image;
@@ -52,27 +74,12 @@ void MainWindow::on_actionSave_As_triggered() {
 }
 
 void MainWindow::on_actioncoordinates_gray_triggered() {
-    int x1 = scene->get_first().x();
-    int y1 = scene->get_first().y();
-    int x2 = scene->get_last().x();
-    int y2 = scene->get_last().y();
 
-    bmp_image->grayscale(x1, y1, x2, y2);
-    scene->clear();
-    scene->addPixmap(QPixmap::fromImage(bmp_image->get_qImage()));
-    ui->graphics_view->setScene(scene);
+    grayscale_toggle();
 }
 
 void MainWindow::on_actioncoordinates_invert_triggered() {
-    int x1 = scene->get_first().x();
-    int y1 = scene->get_first().y();
-    int x2 = scene->get_last().x();
-    int y2 = scene->get_last().y();
-
-    bmp_image->invert_color(x1, y1, x2, y2);
-    scene->clear();
-    scene->addPixmap(QPixmap::fromImage(bmp_image->get_qImage()));
-    ui->graphics_view->setScene(scene);
+    invert_toggle();
 }
 
 void MainWindow::on_actionGraysacle_triggered() {
@@ -100,18 +107,17 @@ void MainWindow::closeEvent(QCloseEvent *event) {
     dialog->exec();
     delete dialog;
 
-    write_settings();
     if (cancel_clicked) {
         event->ignore();
         cancel_clicked = false;
     } else {
+        write_settings();
         event->accept();
     }
 }
 
 bool MainWindow::cancel_toggle() {
     return cancel_clicked = true;
-
 }
 
 void MainWindow::on_actionNew_triggered() {
@@ -154,4 +160,24 @@ void MainWindow::read_settings() {
         scene->addPixmap(QPixmap::fromImage(bmp_image->get_qImage()));
         ui->graphics_view->setScene(scene);
     }
+}
+
+void MainWindow::grayscale_toggle() {
+    ui->mainToolBar->widgetForAction(ui->actioncoordinates_gray)->setStyleSheet("width: 115px;"
+                                                                                "background: rgb(150, 150, 150);");
+    ui->mainToolBar->widgetForAction(ui->actioncoordinates_invert)->setStyleSheet("width: 115px;"
+                                                                                "background: rgb(75, 75, 75);");
+
+    grayscale_clicked = true;
+    invert_clicked = false;
+}
+
+void MainWindow::invert_toggle() {
+    ui->mainToolBar->widgetForAction(ui->actioncoordinates_invert)->setStyleSheet("width: 115px;"
+                                                                                "background: rgb(150, 150, 150);");
+    ui->mainToolBar->widgetForAction(ui->actioncoordinates_gray)->setStyleSheet("width: 115px;"
+                                                                                "background: rgb(75, 75, 75);");
+
+    invert_clicked = true;
+    grayscale_clicked = false;
 }

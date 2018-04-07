@@ -28,6 +28,9 @@ private slots:
     void write_settings(); // write this config
     void closeEvent(QCloseEvent* event);
     bool cancel_toggle();
+    void grayscale_toggle();
+    void invert_toggle();
+    void mouseReleased();
 
     void on_actionOpen_triggered();
 
@@ -53,6 +56,8 @@ private:
     Bmp_image* bmp_image;
     QString open_file_path;
 
+    bool grayscale_clicked;
+    bool invert_clicked;
     bool cancel_clicked;
 };
 

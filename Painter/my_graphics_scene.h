@@ -5,9 +5,17 @@
 #include <QGraphicsSceneMouseEvent>
 #include <QPoint>
 
-class My_graphics_scene : public QGraphicsScene {
+class My_graphics_scene: public QGraphicsScene {
+    Q_OBJECT
+
 public:
-    My_graphics_scene();
+    explicit My_graphics_scene(QObject* parent=nullptr);
+    ~My_graphics_scene();
+
+signals:
+    void mouseMoved();
+    void mousePressed();
+    void mouseReleased();
 
 public slots:
     QPoint get_first();
