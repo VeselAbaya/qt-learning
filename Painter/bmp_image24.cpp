@@ -1,5 +1,5 @@
 #include "bmp_image24.h"
-#include <QDebug>
+
 Bmp_image24::Bmp_image24(std::string file_path) {
     if (file_path != "") {
         BitMapFileHeader bm_header;
@@ -254,13 +254,23 @@ void Bmp_image24::grayscale() {
     }
 }
 
-// TODO fix bug with coordinates out of image
 void Bmp_image24::invert_color(int x1, int y1, int x2, int y2) {
     // find upper left and lower right corners coordinates
+    // in case of out of image
+    if (x1 < 0) {
+        x1 = 0;
+    } if (y1 < 0) {
+        y1 = 0;
+    } if (x2 < 0) {
+        x2 = 0;
+    } if (y2 < 0) {
+        y2 = 0;
+    }
+
     int x_min = std::min(x1, x2);
     int y_min = std::min(y1, y2);
-    int x_max = std::max(x1, x2);
-    int y_max = std::max(y1, y2);
+    int x_max = std::min(std::max(x1, x2), width);  // in case of std::max() out of image
+    int y_max = std::min(std::max(y1, y2), height);
 
     for (int y = y_min; y != y_max; ++y) {
         for (int x = x_min; x != x_max; ++x) {
@@ -273,10 +283,21 @@ void Bmp_image24::invert_color(int x1, int y1, int x2, int y2) {
 
 void Bmp_image24::grayscale(int x1, int y1, int x2, int y2) {
     // find upper left and lower right corners coordinates
+    // in case of out of image
+    if (x1 < 0) {
+        x1 = 0;
+    } if (y1 < 0) {
+        y1 = 0;
+    } if (x2 < 0) {
+        x2 = 0;
+    } if (y2 < 0) {
+        y2 = 0;
+    }
+
     int x_min = std::min(x1, x2);
     int y_min = std::min(y1, y2);
-    int x_max = std::max(x1, x2);
-    int y_max = std::max(y1, y2);
+    int x_max = std::min(std::max(x1, x2), width);
+    int y_max = std::min(std::max(y1, y2), height);
 
     for (int y = y_min; y != y_max; ++y) {
         for (int x = x_min; x != x_max; ++x) {

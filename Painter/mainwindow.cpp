@@ -1,6 +1,6 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
-#include <QDebug>
+
 MainWindow::MainWindow(QWidget *parent): QMainWindow(parent),
                                          ui(new Ui::MainWindow) {
     ui->setupUi(this);
@@ -15,7 +15,10 @@ MainWindow::MainWindow(QWidget *parent): QMainWindow(parent),
     grayscale_clicked = false;
     invert_clicked = false;
     cancel_clicked = false;
+    changed = false;
 
+    ui->mainToolBar->widgetForAction(ui->actioncoordinates_gray)->setStyleSheet("width: 115px;");
+    ui->mainToolBar->widgetForAction(ui->actioncoordinates_invert)->setStyleSheet("width: 115px;");
 
     read_settings();
 }
@@ -32,8 +35,10 @@ void MainWindow::mouseReleased() {
 
     if (grayscale_clicked) {
         bmp_image->grayscale(x1, y1, x2, y2);
+        changed = true;
     } else if (invert_clicked) {
         bmp_image->invert_color(x1, y1, x2, y2);
+        changed = true;
     }
 
     scene->clear();
@@ -63,7 +68,9 @@ void MainWindow::on_actionOpen_triggered() {
 }
 
 void MainWindow::on_actionSave_triggered() {
-    Bmp::save(bmp_image, open_file_path.toStdString());
+    if (changed) {
+        Bmp::save(bmp_image, open_file_path.toStdString());
+    }
 }
 
 void MainWindow::on_actionSave_As_triggered() {
@@ -74,7 +81,6 @@ void MainWindow::on_actionSave_As_triggered() {
 }
 
 void MainWindow::on_actioncoordinates_gray_triggered() {
-
     grayscale_toggle();
 }
 
@@ -83,10 +89,12 @@ void MainWindow::on_actioncoordinates_invert_triggered() {
 }
 
 void MainWindow::on_actionGraysacle_triggered() {
-    bmp_image->grayscale(185, 398, 775, 245);
+    bmp_image->grayscale();
     scene->clear();
     scene->addPixmap(QPixmap::fromImage(bmp_image->get_qImage()));
     ui->graphics_view->setScene(scene);
+
+    changed = true;
 }
 
 void MainWindow::on_actionInvert_triggered() {
@@ -94,6 +102,8 @@ void MainWindow::on_actionInvert_triggered() {
     scene->clear();
     scene->addPixmap(QPixmap::fromImage(bmp_image->get_qImage()));
     ui->graphics_view->setScene(scene);
+
+    changed = true;
 }
 
 void MainWindow::on_actionQuit_triggered() {
@@ -101,11 +111,13 @@ void MainWindow::on_actionQuit_triggered() {
 }
 
 void MainWindow::closeEvent(QCloseEvent *event) {
-    Save_quit_dialog* dialog = new Save_quit_dialog(this);
-    connect(dialog, SIGNAL(save_button_clicked()), this, SLOT(on_actionSave_triggered()));
-    connect(dialog, SIGNAL(cancel_button_clicked(bool)), this, SLOT(cancel_toggle()));
-    dialog->exec();
-    delete dialog;
+    if (changed) {
+        Save_quit_dialog* dialog = new Save_quit_dialog(this);
+        connect(dialog, SIGNAL(save_button_clicked()), this, SLOT(on_actionSave_triggered()));
+        connect(dialog, SIGNAL(cancel_button_clicked(bool)), this, SLOT(cancel_toggle()));
+        dialog->exec();
+        delete dialog;
+    }
 
     if (cancel_clicked) {
         event->ignore();
@@ -121,7 +133,14 @@ bool MainWindow::cancel_toggle() {
 }
 
 void MainWindow::on_actionNew_triggered() {
-    // TODO need to add some dialog: do u want to save "open_file_name"?
+    if (changed) {
+        Save_quit_dialog* dialog = new Save_quit_dialog(this);
+        connect(dialog, SIGNAL(save_button_clicked()), this, SLOT(on_actionSave_triggered()));
+        connect(dialog, SIGNAL(cancel_button_clicked(bool)), this, SLOT(cancel_toggle()));
+        dialog->exec();
+        delete dialog;
+    }
+
     if (bmp_image) { // need to delete prev image from scene before uploading next
         scene->clear();
         delete bmp_image;
@@ -132,6 +151,8 @@ void MainWindow::on_actionNew_triggered() {
 
     scene->addPixmap(QPixmap::fromImage(bmp_image->get_qImage()));
     ui->graphics_view->setScene(scene);
+
+    changed = false;
 }
 
 void MainWindow::write_settings() {
@@ -166,7 +187,7 @@ void MainWindow::grayscale_toggle() {
     ui->mainToolBar->widgetForAction(ui->actioncoordinates_gray)->setStyleSheet("width: 115px;"
                                                                                 "background: rgb(150, 150, 150);");
     ui->mainToolBar->widgetForAction(ui->actioncoordinates_invert)->setStyleSheet("width: 115px;"
-                                                                                "background: rgb(75, 75, 75);");
+                                                                                  "background: rgb(75, 75, 75);");
 
     grayscale_clicked = true;
     invert_clicked = false;
@@ -174,7 +195,7 @@ void MainWindow::grayscale_toggle() {
 
 void MainWindow::invert_toggle() {
     ui->mainToolBar->widgetForAction(ui->actioncoordinates_invert)->setStyleSheet("width: 115px;"
-                                                                                "background: rgb(150, 150, 150);");
+                                                                                  "background: rgb(150, 150, 150);");
     ui->mainToolBar->widgetForAction(ui->actioncoordinates_gray)->setStyleSheet("width: 115px;"
                                                                                 "background: rgb(75, 75, 75);");
 

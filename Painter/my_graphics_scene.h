@@ -27,8 +27,8 @@ private slots:
     void mouseReleaseEvent(QGraphicsSceneMouseEvent* event);
 
 private:
-    QPoint first;
-    QPoint last;
+    QPoint first; // start point
+    QPoint last;  // finish point
 };
 
 #endif // MY_GRAPHICS_SCENE_H

@@ -56,9 +56,11 @@ private:
     Bmp_image* bmp_image;
     QString open_file_path;
 
+    // flags
     bool grayscale_clicked;
     bool invert_clicked;
     bool cancel_clicked;
+    bool changed;
 };
 
 #endif // MAINWINDOW_H
