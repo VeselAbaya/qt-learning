@@ -1,6 +1,6 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
-
+#include <QDebug>
 MainWindow::MainWindow(QWidget *parent): QMainWindow(parent),
                                          ui(new Ui::MainWindow) {
     ui->setupUi(this);
@@ -47,9 +47,13 @@ void MainWindow::mouseReleased() {
 }
 
 void MainWindow::on_actionOpen_triggered() {
-    open_file_path = QFileDialog::getOpenFileName(this, "Open a file");
-    if (!open_file_path.isEmpty()) {
-        if (bmp_image) { // need to delete prev image from scene before uploading next
+    QString file_path = QFileDialog::getOpenFileName(this, "Open a file");
+    if (!file_path.isEmpty()) {
+        delete bmp_image;
+
+        bmp_image = Bmp::bmp(file_path.toStdString());
+        if (bmp_image) {
+            open_file_path = file_path;
             scene->clear();
 
             // some crutch to align center new image :(
@@ -57,13 +61,11 @@ void MainWindow::on_actionOpen_triggered() {
             scene = new My_graphics_scene; //        :(
             // some crutch to align center new image :(
 
-            delete bmp_image;
+            scene->addPixmap(QPixmap::fromImage(bmp_image->get_qImage()));
+            ui->graphics_view->setScene(scene);
+        } else {
+            qDebug() << "here";
         }
-
-        bmp_image = Bmp::bmp(open_file_path.toStdString());
-
-        scene->addPixmap(QPixmap::fromImage(bmp_image->get_qImage()));
-        ui->graphics_view->setScene(scene);
     }
 }
 
@@ -141,10 +143,9 @@ void MainWindow::on_actionNew_triggered() {
         delete dialog;
     }
 
-    if (bmp_image) { // need to delete prev image from scene before uploading next
-        scene->clear();
-        delete bmp_image;
-    }
+    // need to delete prev image from scene before uploading next
+    scene->clear();
+    delete bmp_image;
 
     open_file_path = ""; // this is for config
     bmp_image = Bmp::create(640, 480);
@@ -174,12 +175,15 @@ void MainWindow::read_settings() {
     move(settings.value("pos", QPoint(200, 200)).toPoint());
     settings.endGroup();
 
-    open_file_path = QString(settings.value("file_path", "").toString());
-    if (open_file_path != "") {
-        bmp_image = Bmp::bmp(open_file_path.toStdString());
+    QString file_path = QString(settings.value("file_path", "").toString());
+    if (file_path != "") {
+        bmp_image = Bmp::bmp(file_path.toStdString());
 
-        scene->addPixmap(QPixmap::fromImage(bmp_image->get_qImage()));
-        ui->graphics_view->setScene(scene);
+        if (bmp_image) {
+            open_file_path = file_path;
+            scene->addPixmap(QPixmap::fromImage(bmp_image->get_qImage()));
+            ui->graphics_view->setScene(scene);
+        }
     }
 }
 

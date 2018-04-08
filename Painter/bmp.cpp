@@ -23,10 +23,10 @@ Bmp_image* Bmp::bmp(std::string file_path) {
                     case 24: bmp_image = new Bmp_image24(file_path); break; // There 2 files are reading from two functions (need to fix!)
                     default:
                         QMessageBox msg_box;
+                        msg_box.setWindowTitle("Unsupported bitcount");
                         msg_box.setText("This version supports only 24 bitcount\n"
-                                        "this image bitcount: " + QString::number(bitcount));
+                                        "Uploading image's bitcount: " + QString::number(bitcount));
                         msg_box.exec();
-
                         bmp_image = nullptr;
                 }
 
