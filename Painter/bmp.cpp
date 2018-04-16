@@ -1,5 +1,5 @@
 #include "bmp.h"
-
+#include <QDebug>
 // this is "constuctor" for all bitcounts
 // return nullptr if bitcount isn't standart
 Bmp_image* Bmp::bmp(std::string file_path) {
@@ -18,7 +18,7 @@ Bmp_image* Bmp::bmp(std::string file_path) {
                 file.read(reinterpret_cast<char*>(&bitcount), sizeof(short));
                 file.close();
 
-                Bmp_image* bmp_image;
+                Bmp_image* bmp_image = nullptr;
                 switch(static_cast<int>(bitcount)) {
                     case 24: bmp_image = new Bmp_image24(file_path); break; // There 2 files are reading from two functions (need to fix!)
                     default:

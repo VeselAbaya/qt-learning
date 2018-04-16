@@ -1,5 +1,5 @@
 #include "bmp_image24.h"
-
+#include <QDebug>
 Bmp_image24::Bmp_image24(std::string file_path) {
     if (file_path != "") {
         BitMapFileHeader bm_header;
@@ -306,4 +306,60 @@ void Bmp_image24::grayscale(int x1, int y1, int x2, int y2) {
             set_color(x, y, QColor(luma, luma, luma));
         }
     }
+}
+
+void Bmp_image24::crop(int vertical_crop, int horizontal_crop, Bmp::Crop_direction direction) {
+    height -= vertical_crop;
+    width -= horizontal_crop;
+    size = height * (width*3 + ALIGNMENT24(width));
+
+    uint8_t** cropped_raster = new uint8_t*[height];
+    cropped_raster[0] = new uint8_t[size];
+    for (int i = 1; i != height; ++i) {
+        cropped_raster[i] = cropped_raster[i-1] + ((width*3) + ALIGNMENT24(width));
+    }
+
+
+    switch (direction) {
+        case Bmp::Crop_direction::center:
+            for (int i = 0; i != height; ++i) {
+                for (int j = 0; j != width*3 + ALIGNMENT24(width); ++j) {
+                    cropped_raster[i][j] = raster[i+vertical_crop/2][j+horizontal_crop/2 * 3];
+                }
+            } break;
+
+        case Bmp::Crop_direction::upper_left:
+            for (int i = 0; i != height; ++i) {
+                for (int j = 0; j != width*3 + ALIGNMENT24(width); ++j) {
+                    cropped_raster[i][j] = raster[i][j+horizontal_crop*3];
+                }
+            } break;
+
+        case Bmp::Crop_direction::upper_right:
+            for (int i = 0; i != height; ++i) {
+                for (int j = 0; j != width*3 + ALIGNMENT24(width); ++j) {
+                    cropped_raster[i][j] = raster[i][j];
+                }
+            } break;
+
+        case Bmp::Crop_direction::lower_right:
+            for (int i = 0; i != height; ++i) {
+                for (int j = 0; j != width*3 + ALIGNMENT24(width); ++j) {
+                    cropped_raster[i][j] = raster[i+vertical_crop][j];
+                }
+            } break;
+
+        case Bmp::Crop_direction::lower_left:
+            for (int i = 0; i != height; ++i) {
+                for (int j = 0; j != width*3 + ALIGNMENT24(width); ++j) {
+                    cropped_raster[i][j] = raster[i+vertical_crop][j+horizontal_crop*3];
+                }
+            } break;
+    }
+
+    delete [] raster[0];
+    delete [] raster;
+
+    raster = cropped_raster;
+    raster[0] = cropped_raster[0];
 }

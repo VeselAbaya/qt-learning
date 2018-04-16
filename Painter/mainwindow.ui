@@ -50,8 +50,15 @@
     <property name="title">
      <string>Image</string>
     </property>
+    <widget class="QMenu" name="menuResize">
+     <property name="title">
+      <string>Resize</string>
+     </property>
+     <addaction name="actionCrop_3"/>
+    </widget>
     <addaction name="actionGraysacle"/>
     <addaction name="actionInvert"/>
+    <addaction name="menuResize"/>
    </widget>
    <addaction name="menuFile"/>
    <addaction name="menuImage"/>
@@ -146,6 +153,14 @@ background-color: rgb(75, 75, 75);</string>
    </property>
    <property name="shortcut">
     <string>Ctrl+I</string>
+   </property>
+  </action>
+  <action name="actionCrop_3">
+   <property name="text">
+    <string>Crop</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+C</string>
    </property>
   </action>
  </widget>

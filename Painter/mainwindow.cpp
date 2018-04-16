@@ -49,6 +49,19 @@ void MainWindow::mouseReleased() {
 void MainWindow::on_actionOpen_triggered() {
     QString file_path = QFileDialog::getOpenFileName(this, "Open a file");
     if (!file_path.isEmpty()) {
+        if (changed) {
+            Save_dialog* dialog = new Save_dialog(this);
+            connect(dialog, SIGNAL(save_button_clicked()), this, SLOT(on_actionSave_triggered()));
+            connect(dialog, SIGNAL(cancel_button_clicked(bool)), this, SLOT(cancel_toggle()));
+            dialog->exec();
+            delete dialog;
+
+            if (cancel_clicked) {
+                cancel_clicked = false;
+                return;
+            }
+        }
+
         delete bmp_image;
 
         bmp_image = Bmp::bmp(file_path.toStdString());
@@ -56,15 +69,16 @@ void MainWindow::on_actionOpen_triggered() {
             open_file_path = file_path;
             scene->clear();
 
-            // some crutch to align center new image :(
-            delete scene; //                         :(
-            scene = new My_graphics_scene; //        :(
-            // some crutch to align center new image :(
+            // some crutch to align center new image                                 :(
+            delete scene; //                                                         :(
+            scene = new My_graphics_scene; //                                        :(
+            connect(scene, SIGNAL(mouseReleased()), this, SLOT(mouseReleased())); // :>
+            // some crutch to align center new image                                 :(
 
+            this->setWindowTitle(QString("LULpainter ") + open_file_path);
             scene->addPixmap(QPixmap::fromImage(bmp_image->get_qImage()));
             ui->graphics_view->setScene(scene);
-        } else {
-            qDebug() << "here";
+            changed = false;
         }
     }
 }
@@ -72,6 +86,7 @@ void MainWindow::on_actionOpen_triggered() {
 void MainWindow::on_actionSave_triggered() {
     if (changed) {
         Bmp::save(bmp_image, open_file_path.toStdString());
+        changed = false;
     }
 }
 
@@ -79,6 +94,7 @@ void MainWindow::on_actionSave_As_triggered() {
     QString file_path = QFileDialog::getSaveFileName(this, "Save a file");
     if (file_path != "") {
         Bmp::save(bmp_image, file_path.toStdString());
+        changed = false;
     }
 }
 
@@ -114,7 +130,7 @@ void MainWindow::on_actionQuit_triggered() {
 
 void MainWindow::closeEvent(QCloseEvent *event) {
     if (changed) {
-        Save_quit_dialog* dialog = new Save_quit_dialog(this);
+        Save_dialog* dialog = new Save_dialog(this);
         connect(dialog, SIGNAL(save_button_clicked()), this, SLOT(on_actionSave_triggered()));
         connect(dialog, SIGNAL(cancel_button_clicked(bool)), this, SLOT(cancel_toggle()));
         dialog->exec();
@@ -136,7 +152,7 @@ bool MainWindow::cancel_toggle() {
 
 void MainWindow::on_actionNew_triggered() {
     if (changed) {
-        Save_quit_dialog* dialog = new Save_quit_dialog(this);
+        Save_dialog* dialog = new Save_dialog(this);
         connect(dialog, SIGNAL(save_button_clicked()), this, SLOT(on_actionSave_triggered()));
         connect(dialog, SIGNAL(cancel_button_clicked(bool)), this, SLOT(cancel_toggle()));
         dialog->exec();
@@ -183,6 +199,7 @@ void MainWindow::read_settings() {
             open_file_path = file_path;
             scene->addPixmap(QPixmap::fromImage(bmp_image->get_qImage()));
             ui->graphics_view->setScene(scene);
+            this->setWindowTitle(QString("LULpainter ") + open_file_path);
         }
     }
 }
@@ -198,11 +215,36 @@ void MainWindow::grayscale_toggle() {
 }
 
 void MainWindow::invert_toggle() {
-    ui->mainToolBar->widgetForAction(ui->actioncoordinates_invert)->setStyleSheet("width: 115px;"
-                                                                                  "background: rgb(150, 150, 150);");
     ui->mainToolBar->widgetForAction(ui->actioncoordinates_gray)->setStyleSheet("width: 115px;"
                                                                                 "background: rgb(75, 75, 75);");
+    ui->mainToolBar->widgetForAction(ui->actioncoordinates_invert)->setStyleSheet("width: 115px;"
+                                                                                  "background: rgb(150, 150, 150);");
 
     invert_clicked = true;
     grayscale_clicked = false;
+}
+
+void MainWindow::on_actionCrop_3_triggered() {
+    Crop_dialog* crop_dialog = new Crop_dialog(bmp_image->get_width(), bmp_image->get_height(), this);
+    connect(crop_dialog, SIGNAL(ok_button_clicked(int, int, Bmp::Crop_direction)),
+            this,        SLOT(crop_image(int, int, Bmp::Crop_direction)));
+
+    crop_dialog->exec();
+
+    delete crop_dialog;
+}
+
+void MainWindow::crop_image(int vertical_crop, int horizontal_crop, Bmp::Crop_direction crop_direction) {
+    bmp_image->crop(vertical_crop, horizontal_crop, crop_direction);
+
+    // some crutch to align center new image                                 :(
+    delete scene; //                                                         :(
+    scene = new My_graphics_scene; //                                        :(
+    connect(scene, SIGNAL(mouseReleased()), this, SLOT(mouseReleased())); // :>
+    // some crutch to align center new image                                 :(
+
+    scene->addPixmap(QPixmap::fromImage(bmp_image->get_qImage()));
+    ui->graphics_view->setScene(scene);
+
+    changed = true;
 }

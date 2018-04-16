@@ -28,17 +28,21 @@ SOURCES += \
         mainwindow.cpp \
     bmp_image24.cpp \
     bmp.cpp \
-    save_quit_dialog.cpp \
-    my_graphics_scene.cpp
+    my_graphics_scene.cpp \
+    save_dialog.cpp \
+    crop_dialog.cpp
 
 HEADERS += \
         mainwindow.h \
     bmp_image24.h \
     bmp_image.h \
     bmp.h \
-    save_quit_dialog.h \
-    my_graphics_scene.h
+    my_graphics_scene.h \
+    save_dialog.h \
+    crop_dialog.h \
+    crop_direction.h
 
 FORMS += \
         mainwindow.ui \
-    save_quit_dialog.ui
+    save_dialog.ui \
+    crop_dialog.ui
