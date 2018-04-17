@@ -35,47 +35,7 @@ Bmp_image24::Bmp_image24(std::string file_path) {
     }
 }
 
-Bmp_image24::Bmp_image24(int width, int height): size(height * ((width*3) + ALIGNMENT24(width))), // 24 - bitcount
-                                                 width(width),
-                                                 height(height),
-                                                 bitcount(24) {
-    // allocation
-    raster = new uint8_t*[height];
-    raster[0] = new uint8_t[size];
-    for (int i = 1; i != height; ++i) {
-        raster[i] = raster[i-1] + ((width*3) + ALIGNMENT24(width));
-    }
 
-    for (int i = 0; i != height; ++i) {
-        // null init for all bytes in new raster
-        for (int j = 0; j != ((width*3) + ALIGNMENT24(width)); ++j) {
-            raster[i][j] = 255;
-        }
-    }
-}
-
-Bmp_image24::Bmp_image24(int width, int height, uint8_t* raster): size(height * ((width*3) + ALIGNMENT24(width))), // 24 - bitcount
-                                                                  width(width),
-                                                                  height(height),
-                                                                  bitcount(24) {
-    this->raster = new uint8_t*[height];
-    this->raster[0] = new uint8_t[size];
-
-    for (int i = 1; i != height; ++i) {
-        this->raster[i] = this->raster[i-1] + ((width*3) + ALIGNMENT24(width));
-    }
-
-    for (int i = 0; i != height; ++i) {
-        for (int j = 0; j != (width*3); ++j) {
-            this->raster[i][j] = raster[i*(width*3) + j];
-        }
-
-        // alignment
-        for (int j = width*3; j != (width*3) + ALIGNMENT24(width); ++j) {
-            this->raster[i][j] = 0;
-        }
-    }
-}
 
 Bmp_image24::Bmp_image24(Bmp_image24 const& other) {
     size     = other.size;
@@ -309,10 +269,12 @@ void Bmp_image24::grayscale(int x1, int y1, int x2, int y2) {
 }
 
 void Bmp_image24::crop(int vertical_crop, int horizontal_crop, Bmp::Crop_direction direction) {
+    qDebug() << "old: " << height << width;
     height -= vertical_crop;
     width -= horizontal_crop;
+    //width -= width%2;
     size = height * (width*3 + ALIGNMENT24(width));
-
+    qDebug() << "new: " << height << width;
     uint8_t** cropped_raster = new uint8_t*[height];
     cropped_raster[0] = new uint8_t[size];
     for (int i = 1; i != height; ++i) {
@@ -324,7 +286,9 @@ void Bmp_image24::crop(int vertical_crop, int horizontal_crop, Bmp::Crop_directi
         case Bmp::Crop_direction::center:
             for (int i = 0; i != height; ++i) {
                 for (int j = 0; j != width*3 + ALIGNMENT24(width); ++j) {
-                    cropped_raster[i][j] = raster[i+vertical_crop/2][j+horizontal_crop/2 * 3];
+                    vertical_crop /= 2;
+                    horizontal_crop /= 2;
+                    cropped_raster[i][j] = raster[i+vertical_crop][j+horizontal_crop * 3];
                 }
             } break;
 
