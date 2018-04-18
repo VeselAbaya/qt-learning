@@ -1,5 +1,5 @@
 #include "bmp_image24.h"
-#include <QDebug>
+
 Bmp_image24::Bmp_image24(std::string file_path) {
     if (file_path != "") {
         BitMapFileHeader bm_header;
@@ -306,12 +306,9 @@ void Bmp_image24::grayscale(int x1, int y1, int x2, int y2) {
 }
 
 void Bmp_image24::crop(int vertical_crop, int horizontal_crop, Bmp::Crop_direction direction) {
-    qDebug() << "old: " << height << width;
     height -= vertical_crop;
     width -= horizontal_crop;
-    //width -= width%2;
     size = height * (width*3 + ALIGNMENT24(width));
-    qDebug() << "new: " << height << width;
     uint8_t** cropped_raster = new uint8_t*[height];
     cropped_raster[0] = new uint8_t[size];
     for (int i = 1; i != height; ++i) {
@@ -321,10 +318,10 @@ void Bmp_image24::crop(int vertical_crop, int horizontal_crop, Bmp::Crop_directi
 
     switch (direction) {
         case Bmp::Crop_direction::center:
+            vertical_crop /= 2;
+            horizontal_crop /= 2;
             for (int i = 0; i != height; ++i) {
                 for (int j = 0; j != width*3 + ALIGNMENT24(width); ++j) {
-                    vertical_crop /= 2;
-                    horizontal_crop /= 2;
                     cropped_raster[i][j] = raster[i+vertical_crop][j+horizontal_crop * 3];
                 }
             } break;

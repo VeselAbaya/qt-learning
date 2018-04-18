@@ -1,5 +1,5 @@
 #include "bmp.h"
-#include <QDebug>
+
 // this is "constuctor" for all bitcounts
 // return nullptr if bitcount isn't standart
 Bmp_image* Bmp::bmp(std::string file_path) {

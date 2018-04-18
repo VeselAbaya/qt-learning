@@ -76,6 +76,7 @@ background-color: rgb(75, 75, 75);</string>
    </attribute>
    <addaction name="actioncoordinates_gray"/>
    <addaction name="actioncoordinates_invert"/>
+   <addaction name="actionCrop_3"/>
   </widget>
   <action name="actionSave">
    <property name="text">
