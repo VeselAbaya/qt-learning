@@ -40,7 +40,8 @@ public:
     virtual void invert_color(int x1, int y1, int x2, int y2); // invert only rectangle
     virtual void grayscale(int x1, int y1, int x2, int y2);    // grayscale only rectangle
 
-    virtual void crop(int vertical_crop, int horizontal_crop, Bmp::Crop_direction direction);
+    virtual void crop(int vertical_crop, int horizontal_crop, Bmp::Resize_direction direction);
+    virtual void expanse(int vertical_exp, int horizontal_crop, Bmp::Resize_direction direction, QColor color);
 private:
 
     int size;         // size in bytes

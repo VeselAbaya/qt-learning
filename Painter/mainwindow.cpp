@@ -17,14 +17,17 @@ MainWindow::MainWindow(QWidget *parent): QMainWindow(parent),
     cancel_clicked = false;
     changed = false;
 
-    ui->mainToolBar->widgetForAction(ui->actionCrop_3)->setStyleSheet("width: 115px;");
-    ui->mainToolBar->widgetForAction(ui->actioncoordinates_gray)->setStyleSheet("width: 115px;");
+    ui->mainToolBar->widgetForAction(ui->actionCrop_3)            ->setStyleSheet("width: 115px;");
+    ui->mainToolBar->widgetForAction(ui->actioncoordinates_gray)  ->setStyleSheet("width: 115px;");
     ui->mainToolBar->widgetForAction(ui->actioncoordinates_invert)->setStyleSheet("width: 115px;");
+    ui->mainToolBar->widgetForAction(ui->actionExpanse)           ->setStyleSheet("width: 115px;");
 
     read_settings();
 }
 
 MainWindow::~MainWindow() {
+    delete bmp_image;
+    delete scene;
     delete ui;
 }
 
@@ -227,16 +230,40 @@ void MainWindow::invert_toggle() {
 
 void MainWindow::on_actionCrop_3_triggered() {
     Crop_dialog* crop_dialog = new Crop_dialog(bmp_image->get_width(), bmp_image->get_height(), this);
-    connect(crop_dialog, SIGNAL(ok_button_clicked(int, int, Bmp::Crop_direction)),
-            this,        SLOT(crop_image(int, int, Bmp::Crop_direction)));
+    connect(crop_dialog, SIGNAL(ok_button_clicked(int, int, Bmp::Resize_direction)),
+            this,        SLOT(crop_image(int, int, Bmp::Resize_direction)));
 
     crop_dialog->exec();
-
     delete crop_dialog;
 }
 
-void MainWindow::crop_image(int vertical_crop, int horizontal_crop, Bmp::Crop_direction crop_direction) {
+void MainWindow::crop_image(int vertical_crop, int horizontal_crop, Bmp::Resize_direction crop_direction) {
     bmp_image->crop(vertical_crop, horizontal_crop, crop_direction);
+
+    // some crutch to align center new image                                 :(
+    delete scene; //                                                         :(
+    scene = new My_graphics_scene; //                                        :(
+    connect(scene, SIGNAL(mouseReleased()), this, SLOT(mouseReleased())); // :>
+    // some crutch to align center new image                                 :(
+
+    scene->addPixmap(QPixmap::fromImage(bmp_image->get_qImage()));
+    ui->graphics_view->setScene(scene);
+
+    changed = true;
+}
+
+void MainWindow::on_actionExpanse_triggered() {
+    Expanse_dialog* expanse_dialog = new Expanse_dialog(bmp_image->get_width(), bmp_image->get_height(), this);
+    connect(expanse_dialog, SIGNAL(ok_button_clicked(int, int, Bmp::Resize_direction, QColor)),
+            this,        SLOT(expanse_image(int, int, Bmp::Resize_direction, QColor)));
+
+    expanse_dialog->exec();
+    delete expanse_dialog;
+}
+
+void MainWindow::expanse_image(int vertical_exp, int horizontal_exp,
+                               Bmp::Resize_direction expanse_direction, QColor color) {
+    bmp_image->expanse(vertical_exp, horizontal_exp, expanse_direction, color);
 
     // some crutch to align center new image                                 :(
     delete scene; //                                                         :(

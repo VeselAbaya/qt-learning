@@ -305,7 +305,7 @@ void Bmp_image24::grayscale(int x1, int y1, int x2, int y2) {
     }
 }
 
-void Bmp_image24::crop(int vertical_crop, int horizontal_crop, Bmp::Crop_direction direction) {
+void Bmp_image24::crop(int vertical_crop, int horizontal_crop, Bmp::Resize_direction direction) {
     height -= vertical_crop;
     width -= horizontal_crop;
     size = height * (width*3 + ALIGNMENT24(width));
@@ -317,7 +317,7 @@ void Bmp_image24::crop(int vertical_crop, int horizontal_crop, Bmp::Crop_directi
 
 
     switch (direction) {
-        case Bmp::Crop_direction::center:
+        case Bmp::Resize_direction::center:
             vertical_crop /= 2;
             horizontal_crop /= 2;
             for (int i = 0; i != height; ++i) {
@@ -326,28 +326,28 @@ void Bmp_image24::crop(int vertical_crop, int horizontal_crop, Bmp::Crop_directi
                 }
             } break;
 
-        case Bmp::Crop_direction::upper_left:
+        case Bmp::Resize_direction::upper_left:
             for (int i = 0; i != height; ++i) {
                 for (int j = 0; j != width*3 + ALIGNMENT24(width); ++j) {
                     cropped_raster[i][j] = raster[i][j+horizontal_crop*3];
                 }
             } break;
 
-        case Bmp::Crop_direction::upper_right:
+        case Bmp::Resize_direction::upper_right:
             for (int i = 0; i != height; ++i) {
                 for (int j = 0; j != width*3 + ALIGNMENT24(width); ++j) {
                     cropped_raster[i][j] = raster[i][j];
                 }
             } break;
 
-        case Bmp::Crop_direction::lower_right:
+        case Bmp::Resize_direction::lower_right:
             for (int i = 0; i != height; ++i) {
                 for (int j = 0; j != width*3 + ALIGNMENT24(width); ++j) {
                     cropped_raster[i][j] = raster[i+vertical_crop][j];
                 }
             } break;
 
-        case Bmp::Crop_direction::lower_left:
+        case Bmp::Resize_direction::lower_left:
             for (int i = 0; i != height; ++i) {
                 for (int j = 0; j != width*3 + ALIGNMENT24(width); ++j) {
                     cropped_raster[i][j] = raster[i+vertical_crop][j+horizontal_crop*3];
@@ -360,4 +360,147 @@ void Bmp_image24::crop(int vertical_crop, int horizontal_crop, Bmp::Crop_directi
 
     raster = cropped_raster;
     raster[0] = cropped_raster[0];
+}
+
+void Bmp_image24::expanse(int vertical_exp, int horizontal_exp, Bmp::Resize_direction direction, QColor color) {
+    int old_width = width;
+    int old_height = height;
+
+    height += vertical_exp;
+    width += horizontal_exp;
+    size = height * (width*3 + ALIGNMENT24(width));
+    uint8_t** expansed_raster = new uint8_t*[height];
+    expansed_raster[0] = new uint8_t[size]{};
+    for (int i = 1; i != height; ++i) {
+        expansed_raster[i] = expansed_raster[i-1] + ((width*3) + ALIGNMENT24(width));
+    }
+
+    switch(direction) {
+        case Bmp::Resize_direction::center:
+            vertical_exp /= 2;
+            horizontal_exp /= 2;
+            for (int i = 0; i != vertical_exp; ++i) {
+               for (int j = 0; j < (width*3) - 2; j += 3) {
+                   expansed_raster[i][j] = color.blue();
+                   expansed_raster[i][j+1] = color.green();
+                   expansed_raster[i][j+2] = color.red();
+                }
+            }
+
+
+            for (int i = vertical_exp; i != old_height + vertical_exp; ++i) {
+                for (int j = 0; j < horizontal_exp*3 - 2; j += 3) {
+                    expansed_raster[i][j] = color.blue();
+                    expansed_raster[i][j+1] = color.green();
+                    expansed_raster[i][j+2] = color.red();
+                }
+
+                for (int j = horizontal_exp*3; j != old_width*3 + horizontal_exp*3; ++j) {
+                    expansed_raster[i][j] = raster[i-vertical_exp][j-horizontal_exp*3];
+                }
+
+                for (int j = old_width*3 + horizontal_exp*3; j < width*3 - 2; j += 3) {
+                    expansed_raster[i][j] = color.blue();
+                    expansed_raster[i][j+1] = color.green();
+                    expansed_raster[i][j+2] = color.red();
+                }
+            }
+
+            for (int i = old_height + vertical_exp; i != height; ++i) {
+                for (int j = 0; j < (width*3) - 2; j += 3) {
+                    expansed_raster[i][j] = color.blue();
+                    expansed_raster[i][j+1] = color.green();
+                    expansed_raster[i][j+2] = color.red();
+                }
+            } break;
+
+        case Bmp::Resize_direction::upper_left:
+            for (int i = 0; i != old_height; ++i) {
+                for (int j = 0; j < horizontal_exp*3 - 2; j += 3) {
+                    expansed_raster[i][j] = color.blue();
+                    expansed_raster[i][j+1] = color.green();
+                    expansed_raster[i][j+2] = color.red();
+                }
+
+                for (int j = horizontal_exp*3; j != (width*3) + ALIGNMENT24(width); ++j) {
+                    expansed_raster[i][j] = raster[i][j-horizontal_exp*3]; // TODO some COLOR instead 0
+                }
+            }
+            for (int i = old_height; i != height; ++i) {
+                for (int j = 0; j < width*3 - 2; j += 3) {
+                    expansed_raster[i][j] = color.blue();
+                    expansed_raster[i][j+1] = color.green();
+                    expansed_raster[i][j+2] = color.red();
+                }
+            } break;
+
+        case Bmp::Resize_direction::upper_right:
+            for (int i = 0; i != old_height; ++i) {
+                for (int j = 0; j != (old_width)*3; ++j) {
+                    expansed_raster[i][j] = raster[i][j];
+                }
+
+                for (int j = old_width*3; j < width*3 - 2; j += 3) {
+                    expansed_raster[i][j] = color.blue();
+                    expansed_raster[i][j+1] = color.green();
+                    expansed_raster[i][j+2] = color.red();
+                }
+            }
+
+            for (int i = old_height; i != height; ++i) {
+                for (int j = 0; j < width*3 - 2; j += 3) {
+                    expansed_raster[i][j] = color.blue();
+                    expansed_raster[i][j+1] = color.green();
+                    expansed_raster[i][j+2] = color.red();
+                }
+            } break;
+
+        case Bmp::Resize_direction::lower_right:
+            for (int i = 0; i != height - old_height; ++i) {
+                for (int j = 0; j < width*3 - 2; j += 3) {
+                    expansed_raster[i][j] = color.blue();
+                    expansed_raster[i][j+1] = color.green();
+                    expansed_raster[i][j+2] = color.red();
+                }
+            }
+
+            for (int i = height - old_height; i != height; ++i) {
+                for (int j = 0; j != old_width*3; ++j) {
+                    expansed_raster[i][j] = raster[i-vertical_exp][j];
+                }
+
+                for (int j = old_width*3; j < width*3 - 2; j += 3) {
+                    expansed_raster[i][j] = color.blue();
+                    expansed_raster[i][j+1] = color.green();
+                    expansed_raster[i][j+2] = color.red();
+                }
+            } break;
+
+        case Bmp::Resize_direction::lower_left:
+            for (int i = 0; i != height - old_height; ++i) {
+                for (int j = 0; j < (width*3) - 2; j += 3) {
+                    expansed_raster[i][j] = color.blue();
+                    expansed_raster[i][j+1] = color.green();
+                    expansed_raster[i][j+2] = color.red();
+                }
+            }
+
+            for (int i = height - old_height; i != height; ++i) {
+                for (int j = 0; j < horizontal_exp*3 - 2; j += 3) {
+                    expansed_raster[i][j] = color.blue();
+                    expansed_raster[i][j+1] = color.green();
+                    expansed_raster[i][j+2] = color.red();
+                }
+
+                for (int j = horizontal_exp*3; j != (width*3) + ALIGNMENT24(width); ++j) {
+                    expansed_raster[i][j] = raster[i-vertical_exp][j - horizontal_exp*3];
+                }
+            } break;
+    }
+
+    delete [] raster[0];
+    delete [] raster;
+
+    raster = expansed_raster;
+    raster[0] = expansed_raster[0];
 }

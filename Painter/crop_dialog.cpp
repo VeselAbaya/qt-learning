@@ -1,11 +1,11 @@
 #include "crop_dialog.h"
 #include "ui_crop_dialog.h"
 
-Crop_dialog::Crop_dialog(int max_widht, int max_height, QWidget *parent): QDialog(parent),
+Crop_dialog::Crop_dialog(int max_width, int max_height, QWidget *parent): QDialog(parent),
                                            ui(new Ui::Crop_dialog) {
     ui->setupUi(this);
     ui->vertical_crop->setMaximum(max_height-1);
-    ui->horizontal_crop->setMaximum(max_widht-1);
+    ui->horizontal_crop->setMaximum(max_width-1);
 
     read_settings();
 }
@@ -23,17 +23,17 @@ void Crop_dialog::on_cancel_button_clicked() {
 
 
 void Crop_dialog::on_ok_button_clicked() {
-    Bmp::Crop_direction crop_direction;
+    Bmp::Resize_direction crop_direction;
     switch(ui->crop_direction->currentIndex()) {
-        case 0: crop_direction = Bmp::Crop_direction::center; break;
-        case 1: crop_direction = Bmp::Crop_direction::upper_left; break;
-        case 2: crop_direction = Bmp::Crop_direction::upper_right; break;
-        case 3: crop_direction = Bmp::Crop_direction::lower_right; break;
-        case 4: crop_direction = Bmp::Crop_direction::lower_left; break;
+        case 0: crop_direction = Bmp::Resize_direction::center; break;
+        case 1: crop_direction = Bmp::Resize_direction::upper_left; break;
+        case 2: crop_direction = Bmp::Resize_direction::upper_right; break;
+        case 3: crop_direction = Bmp::Resize_direction::lower_right; break;
+        case 4: crop_direction = Bmp::Resize_direction::lower_left; break;
     }
 
-    emit ok_button_clicked(ui->vertical_crop->text().toInt(),
-                           ui->horizontal_crop->text().toInt(),
+    emit ok_button_clicked(ui->vertical_crop->value(),
+                           ui->horizontal_crop->value(),
                            crop_direction);
 
     write_settings();
@@ -44,8 +44,8 @@ void Crop_dialog::write_settings() {
     QSettings settings("My Soft", "LULpainter");
 
     settings.beginGroup("Crop dialog");
-    settings.setValue("vertical_crop", ui->vertical_crop->text().toInt());
-    settings.setValue("horizontal_crop", ui->horizontal_crop->text().toInt());
+    settings.setValue("vertical_crop", ui->vertical_crop->value());
+    settings.setValue("horizontal_crop", ui->horizontal_crop->value());
     settings.setValue("crop_direction", ui->crop_direction->currentIndex());
     settings.setValue("size", size());
     settings.setValue("pos", pos());

@@ -1,7 +1,7 @@
 #ifndef BMP_IMAGE_H
 #define BMP_IMAGE_H
 
-#include "crop_direction.h"
+#include "resize_direction.h"
 
 #include <QColor>
 #include <QImage>
@@ -57,7 +57,8 @@ public:
 
     virtual void invert_color(int x1, int y1, int x2, int y2) {}
     virtual void grayscale(int x1, int y1, int x2, int y2) {}
-    virtual void crop(int vertical_crop, int horizontal_crop, Bmp::Crop_direction direction) {}
+    virtual void crop(int vertical_crop, int horizontal_crop, Bmp::Resize_direction direction) {}
+    virtual void expanse(int vertical_exp, int horizontal_crop, Bmp::Resize_direction direction, QColor color) {}
 };
 
 #endif // BMP_IMAGE_H

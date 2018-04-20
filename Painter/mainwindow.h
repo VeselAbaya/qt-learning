@@ -5,6 +5,7 @@
 #include "save_dialog.h"
 #include "my_graphics_scene.h"
 #include "crop_dialog.h"
+#include "expanse_dialog.h"
 
 #include <QMainWindow>
 #include <QSettings>
@@ -32,7 +33,8 @@ private slots:
     void grayscale_toggle();
     void invert_toggle();
     void mouseReleased();
-    void crop_image(int vertical_crop, int horizontal_crop, Bmp::Crop_direction crop_direction);
+    void crop_image(int vertical_crop, int horizontal_crop, Bmp::Resize_direction crop_direction);
+    void expanse_image(int vertical_exp, int horizontal_exp, Bmp::Resize_direction expanse_direction, QColor color);
 
     void on_actionOpen_triggered();
     void on_actionSave_triggered();
@@ -44,6 +46,8 @@ private slots:
     void on_actionQuit_triggered();
     void on_actionNew_triggered();
     void on_actionCrop_3_triggered();
+
+    void on_actionExpanse_triggered();
 
 private:
     Ui::MainWindow* ui;

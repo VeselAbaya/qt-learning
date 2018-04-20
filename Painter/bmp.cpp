@@ -75,8 +75,8 @@ void Bmp::save(Bmp_image *image, std::string file_path) {
         bm_info.biPlanes        = 1;
         bm_info.biCompression   = 0;
         bm_info.biSizeImage     = image->get_size();
-        bm_info.biXPelsPerMeter = MICROSOFT_PPM;
-        bm_info.biYPelsPerMeter = MICROSOFT_PPM;
+        bm_info.biXPelsPerMeter = 0;
+        bm_info.biYPelsPerMeter = 0;
 
         switch (image->get_bitcount()) {
             case 24: // 3 - bytes on color; alignment - (width*3)%4

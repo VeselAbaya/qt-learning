@@ -55,6 +55,7 @@
       <string>Resize</string>
      </property>
      <addaction name="actionCrop_3"/>
+     <addaction name="actionExpanse"/>
     </widget>
     <addaction name="actionGraysacle"/>
     <addaction name="actionInvert"/>
@@ -77,6 +78,7 @@ background-color: rgb(75, 75, 75);</string>
    <addaction name="actioncoordinates_gray"/>
    <addaction name="actioncoordinates_invert"/>
    <addaction name="actionCrop_3"/>
+   <addaction name="actionExpanse"/>
   </widget>
   <action name="actionSave">
    <property name="text">
@@ -162,6 +164,14 @@ background-color: rgb(75, 75, 75);</string>
    </property>
    <property name="shortcut">
     <string>Ctrl+C</string>
+   </property>
+  </action>
+  <action name="actionExpanse">
+   <property name="text">
+    <string>Expanse</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+E</string>
    </property>
   </action>
  </widget>

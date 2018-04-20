@@ -1,7 +1,7 @@
 #ifndef CROP_DIALOG_H
 #define CROP_DIALOG_H
 
-#include "crop_direction.h"
+#include "resize_direction.h"
 
 #include <QDialog>
 #include <QSettings>
@@ -14,11 +14,11 @@ class Crop_dialog: public QDialog {
     Q_OBJECT
 
 public:
-    explicit Crop_dialog(int max_widht, int max_height, QWidget *parent = 0);
+    explicit Crop_dialog(int max_width, int max_height, QWidget *parent = 0);
     ~Crop_dialog();
 
 signals:
-    void ok_button_clicked(int vertical_crop, int horizontal_crop, Bmp::Crop_direction direction);
+    void ok_button_clicked(int vertical_crop, int horizontal_crop, Bmp::Resize_direction direction);
 
 private slots:
     void write_settings();
