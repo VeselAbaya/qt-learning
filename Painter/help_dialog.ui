@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>Help_dialog</class>
+ <widget class="QDialog" name="Help_dialog">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>634</width>
+    <height>508</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Dialog</string>
+  </property>
+  <property name="styleSheet">
+   <string notr="true">QDialog {
+	background-color: rgb(75, 75, 75);
+}</string>
+  </property>
+  <widget class="QTabWidget" name="tabWidget">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>635</width>
+     <height>510</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">QTabWidget {
+	background-color: rgb(75, 75, 75);
+	border: 0px;
+}
+
+QTabBar {
+	background-color: rgb(75, 75, 75);
+	color: white;
+}
+
+QTabBar::tab:selected {
+	background-color: white;
+	color: rgb(75, 75, 75);
+}</string>
+   </property>
+   <property name="currentIndex">
+    <number>0</number>
+   </property>
+   <widget class="QWidget" name="grayscale_tab">
+    <property name="styleSheet">
+     <string notr="true">border: 0px;</string>
+    </property>
+    <attribute name="title">
+     <string>Grayscale</string>
+    </attribute>
+    <widget class="QTextBrowser" name="grayscale_text">
+     <property name="geometry">
+      <rect>
+       <x>-2</x>
+       <y>0</y>
+       <width>635</width>
+       <height>472</height>
+      </rect>
+     </property>
+    </widget>
+   </widget>
+   <widget class="QWidget" name="invert_tab">
+    <attribute name="title">
+     <string>Invert</string>
+    </attribute>
+    <widget class="QTextBrowser" name="invert_text">
+     <property name="geometry">
+      <rect>
+       <x>-2</x>
+       <y>-2</y>
+       <width>635</width>
+       <height>472</height>
+      </rect>
+     </property>
+    </widget>
+   </widget>
+   <widget class="QWidget" name="crop_tab">
+    <attribute name="title">
+     <string>Crop</string>
+    </attribute>
+    <widget class="QTextBrowser" name="crop_text">
+     <property name="geometry">
+      <rect>
+       <x>-2</x>
+       <y>-2</y>
+       <width>635</width>
+       <height>472</height>
+      </rect>
+     </property>
+    </widget>
+   </widget>
+   <widget class="QWidget" name="expanse_tab">
+    <attribute name="title">
+     <string>Expanse</string>
+    </attribute>
+    <widget class="QTextBrowser" name="expanse_text">
+     <property name="geometry">
+      <rect>
+       <x>-2</x>
+       <y>-2</y>
+       <width>635</width>
+       <height>472</height>
+      </rect>
+     </property>
+    </widget>
+   </widget>
+  </widget>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

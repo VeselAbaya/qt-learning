@@ -6,6 +6,7 @@ Crop_dialog::Crop_dialog(int max_width, int max_height, QWidget *parent): QDialo
     ui->setupUi(this);
     ui->vertical_crop->setMaximum(max_height-1);
     ui->horizontal_crop->setMaximum(max_width-1);
+    setWindowTitle("Crop");
 
     read_settings();
 }

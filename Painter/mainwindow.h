@@ -6,6 +6,7 @@
 #include "my_graphics_scene.h"
 #include "crop_dialog.h"
 #include "expanse_dialog.h"
+#include "help_dialog.h"
 
 #include <QMainWindow>
 #include <QSettings>
@@ -15,6 +16,8 @@
 #include <QImage>
 #include <QString>
 #include <QCloseEvent>
+#include <QHBoxLayout>
+#include <QVBoxLayout>
 
 namespace Ui { class MainWindow; }
 
@@ -48,6 +51,10 @@ private slots:
     void on_actionCrop_3_triggered();
 
     void on_actionExpanse_triggered();
+
+    void on_actionImage_info_triggered();
+
+    void on_actionHelp_triggered();
 
 private:
     Ui::MainWindow* ui;

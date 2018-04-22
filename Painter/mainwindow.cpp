@@ -1,6 +1,6 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
-
+#include <QDebug>
 MainWindow::MainWindow(QWidget *parent): QMainWindow(parent),
                                          ui(new Ui::MainWindow) {
     ui->setupUi(this);
@@ -275,4 +275,41 @@ void MainWindow::expanse_image(int vertical_exp, int horizontal_exp,
     ui->graphics_view->setScene(scene);
 
     changed = true;
+}
+
+void MainWindow::on_actionImage_info_triggered() {
+    QDialog* info = new QDialog(this);
+    info->setWindowTitle("Image info");
+    // here may be memory leaks;
+    QVBoxLayout* labels = new QVBoxLayout();
+    QLabel* width = new QLabel("Width:      ");
+    QLabel* height = new QLabel("Height:     ");
+    QLabel* size = new QLabel("Size:          ");
+    QLabel* bitcount = new QLabel("Bitcount: ");
+    labels->addWidget(width);
+    labels->addWidget(height);
+    labels->addWidget(size);
+    labels->addWidget(bitcount);
+
+    QVBoxLayout* values = new QVBoxLayout();
+    QLabel* vwidth = new QLabel(QString::number(bmp_image->get_width()) + QString(" px"));
+    QLabel* vheight = new QLabel(QString::number(bmp_image->get_height()) + QString(" px"));
+    QLabel* vsize = new QLabel(QString::number(bmp_image->get_size()) + QString(" bytes"));
+    QLabel* vbitcount = new QLabel(QString::number(bmp_image->get_bitcount()) + QString(" bits"));
+    values->addWidget(vwidth);
+    values->addWidget(vheight);
+    values->addWidget(vsize);
+    values->addWidget(vbitcount);
+
+    QHBoxLayout* content = new QHBoxLayout();
+    content->addLayout(labels);
+    content->addLayout(values);
+
+    info->setLayout(content);
+    info->show();
+}
+
+void MainWindow::on_actionHelp_triggered() {
+    Help_dialog* help = new Help_dialog;
+    help->show();
 }

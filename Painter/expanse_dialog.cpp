@@ -4,8 +4,7 @@
 Expanse_dialog::Expanse_dialog(int max_width, int max_height, QWidget *parent): QDialog(parent),
                                                  ui(new Ui::Expanse_dialog) {
     ui->setupUi(this);
-    ui->vertical_crop->setMaximum(max_height-1);
-    ui->horizontal_crop->setMaximum(max_width-1);
+    setWindowTitle("Expanse");
 
     read_settings();
     set_background_color(color);
