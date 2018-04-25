@@ -37,6 +37,15 @@
      <height>34</height>
     </rect>
    </property>
+   <property name="maximumSize">
+    <size>
+     <width>16777215</width>
+     <height>16777215</height>
+    </size>
+   </property>
+   <property name="maximum">
+    <number>16777215</number>
+   </property>
   </widget>
   <widget class="QWidget" name="layoutWidget">
    <property name="geometry">
@@ -116,6 +125,9 @@
      <width>149</width>
      <height>34</height>
     </rect>
+   </property>
+   <property name="maximum">
+    <number>16777215</number>
    </property>
   </widget>
   <widget class="QPushButton" name="ok_button">

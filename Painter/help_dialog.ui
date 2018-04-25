@@ -6,9 +6,21 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>634</width>
-    <height>508</height>
+    <width>635</width>
+    <height>150</height>
    </rect>
+  </property>
+  <property name="minimumSize">
+   <size>
+    <width>635</width>
+    <height>150</height>
+   </size>
+  </property>
+  <property name="maximumSize">
+   <size>
+    <width>635</width>
+    <height>150</height>
+   </size>
   </property>
   <property name="windowTitle">
    <string>Dialog</string>
@@ -58,8 +70,8 @@ QTabBar::tab:selected {
       <rect>
        <x>-2</x>
        <y>0</y>
-       <width>635</width>
-       <height>472</height>
+       <width>638</width>
+       <height>150</height>
       </rect>
      </property>
     </widget>

@@ -1,7 +1,7 @@
 #include "expanse_dialog.h"
 #include "ui_expanse_dialog.h"
 
-Expanse_dialog::Expanse_dialog(int max_width, int max_height, QWidget *parent): QDialog(parent),
+Expanse_dialog::Expanse_dialog(QWidget *parent): QDialog(parent),
                                                  ui(new Ui::Expanse_dialog) {
     ui->setupUi(this);
     setWindowTitle("Expanse");

@@ -16,7 +16,7 @@ class Expanse_dialog: public QDialog {
     Q_OBJECT
 
 public:
-    explicit Expanse_dialog(int max_width, int max_height, QWidget *parent = 0);
+    explicit Expanse_dialog(QWidget *parent = 0);
     ~Expanse_dialog();
 
 signals:

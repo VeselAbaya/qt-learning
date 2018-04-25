@@ -1,6 +1,6 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
-#include <QDebug>
+
 MainWindow::MainWindow(QWidget *parent): QMainWindow(parent),
                                          ui(new Ui::MainWindow) {
     ui->setupUi(this);
@@ -66,10 +66,10 @@ void MainWindow::on_actionOpen_triggered() {
             }
         }
 
-        delete bmp_image;
 
-        bmp_image = Bmp::bmp(file_path.toStdString());
-        if (bmp_image) {
+        Bmp_image* opening_bmp_image = Bmp::bmp(file_path.toStdString());
+        if (opening_bmp_image) {
+            bmp_image = opening_bmp_image;
             open_file_path = file_path;
             scene->clear();
 
@@ -253,7 +253,7 @@ void MainWindow::crop_image(int vertical_crop, int horizontal_crop, Bmp::Resize_
 }
 
 void MainWindow::on_actionExpanse_triggered() {
-    Expanse_dialog* expanse_dialog = new Expanse_dialog(bmp_image->get_width(), bmp_image->get_height(), this);
+    Expanse_dialog* expanse_dialog = new Expanse_dialog(this);
     connect(expanse_dialog, SIGNAL(ok_button_clicked(int, int, Bmp::Resize_direction, QColor)),
             this,        SLOT(expanse_image(int, int, Bmp::Resize_direction, QColor)));
 
