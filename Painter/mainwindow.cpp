@@ -1,16 +1,19 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
-
+// TODO the highest window title is ".../tiger.bmp" ???? WHAT
+// TODO add functionality to info_dialog (need to update image info dynamically)
+#include <QDebug>
 MainWindow::MainWindow(QWidget *parent): QMainWindow(parent),
                                          ui(new Ui::MainWindow) {
+//    ui->graphics_view->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+//    ui->graphics_view->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     ui->setupUi(this);
-    ui->graphics_view->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-    ui->graphics_view->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     setCentralWidget(ui->graphics_view);
 
     scene = new My_graphics_scene();
     connect(scene, SIGNAL(mouseReleased()), this, SLOT(mouseReleased()));
 
+    prev_file_path = "";
     bmp_image = nullptr;
     grayscale_clicked = false;
     invert_clicked = false;
@@ -66,10 +69,10 @@ void MainWindow::on_actionOpen_triggered() {
             }
         }
 
-
         Bmp_image* opening_bmp_image = Bmp::bmp(file_path.toStdString());
         if (opening_bmp_image) {
             bmp_image = opening_bmp_image;
+            prev_file_path = open_file_path;
             open_file_path = file_path;
             scene->clear();
 
@@ -79,10 +82,19 @@ void MainWindow::on_actionOpen_triggered() {
             connect(scene, SIGNAL(mouseReleased()), this, SLOT(mouseReleased())); // :>
             // some crutch to align center new image                                 :(
 
-            this->setWindowTitle(QString("LULpainter ") + open_file_path);
+            setWindowTitle(QString("LULpainter ") + open_file_path);
             scene->addPixmap(QPixmap::fromImage(bmp_image->get_qImage()));
             ui->graphics_view->setScene(scene);
             changed = false;
+        } else {
+            QErrorMessage err_msg;
+            err_msg.setWindowTitle("Opening file error");
+            err_msg.showMessage("Can't open this file on some reason.");
+            err_msg.setStyleSheet("QPushButton {"
+                                  "    color: white;"
+                                  "    background-color: rgb(75, 75, 75);"
+                                  "}");
+            err_msg.exec();
         }
     }
 }
@@ -95,11 +107,7 @@ void MainWindow::on_actionSave_triggered() {
 }
 
 void MainWindow::on_actionSave_As_triggered() {
-    QString file_path = QFileDialog::getSaveFileName(this, "Save a file");
-    if (file_path != "") {
-        Bmp::save(bmp_image, file_path.toStdString());
-        changed = false;
-    }
+    save_as(this);
 }
 
 void MainWindow::on_actioncoordinates_gray_triggered() {
@@ -135,7 +143,13 @@ void MainWindow::on_actionQuit_triggered() {
 void MainWindow::closeEvent(QCloseEvent *event) {
     if (changed) {
         Save_dialog* dialog = new Save_dialog(this);
-        connect(dialog, SIGNAL(save_button_clicked()), this, SLOT(on_actionSave_triggered()));
+
+        if (open_file_path != "") {
+            connect(dialog, SIGNAL(save_button_clicked(QWidget*)), this, SLOT(on_actionSave_triggered()));
+        } else {
+            connect(dialog, SIGNAL(save_button_clicked(QWidget*)), this, SLOT(save_as(QWidget*)));
+        }
+
         connect(dialog, SIGNAL(cancel_button_clicked(bool)), this, SLOT(cancel_toggle()));
         dialog->exec();
         delete dialog;
@@ -145,6 +159,10 @@ void MainWindow::closeEvent(QCloseEvent *event) {
         event->ignore();
         cancel_clicked = false;
     } else {
+        if (open_file_path == "") {
+            open_file_path = prev_file_path;
+        }
+
         write_settings();
         event->accept();
     }
@@ -157,23 +175,34 @@ bool MainWindow::cancel_toggle() {
 void MainWindow::on_actionNew_triggered() {
     if (changed) {
         Save_dialog* dialog = new Save_dialog(this);
-        connect(dialog, SIGNAL(save_button_clicked()), this, SLOT(on_actionSave_triggered()));
+        connect(dialog, SIGNAL(save_button_clicked(QWidget*)), this, SLOT(on_actionSave_triggered()));
         connect(dialog, SIGNAL(cancel_button_clicked(bool)), this, SLOT(cancel_toggle()));
         dialog->exec();
         delete dialog;
     }
 
+    if (cancel_clicked) {
+        cancel_clicked = false;
+        return;
+    }
+
     // need to delete prev image from scene before uploading next
     scene->clear();
-    delete bmp_image;
 
-    open_file_path = ""; // this is for config
-    bmp_image = Bmp::create(640, 480);
+    Bmp_image* opening_bmp_image = Bmp::create(ui->graphics_view->width(), ui->graphics_view->height()); // TODO something
 
-    scene->addPixmap(QPixmap::fromImage(bmp_image->get_qImage()));
-    ui->graphics_view->setScene(scene);
+    if (opening_bmp_image) {
+        delete bmp_image;
+        bmp_image = opening_bmp_image;
+        prev_file_path = open_file_path;
+        open_file_path = ""; // this is for config
+        scene->addPixmap(QPixmap::fromImage(bmp_image->get_qImage()));
+        ui->graphics_view->setScene(scene);
+        changed = true;
 
-    changed = false;
+        this->setWindowTitle(QString("LULpainter"));
+    }
+
 }
 
 void MainWindow::write_settings() {
@@ -284,6 +313,7 @@ void MainWindow::on_actionImage_info_triggered() {
     QVBoxLayout* labels = new QVBoxLayout();
     QLabel* width = new QLabel("Width:      ");
     QLabel* height = new QLabel("Height:     ");
+
     QLabel* size = new QLabel("Size:          ");
     QLabel* bitcount = new QLabel("Bitcount: ");
     labels->addWidget(width);
@@ -294,7 +324,17 @@ void MainWindow::on_actionImage_info_triggered() {
     QVBoxLayout* values = new QVBoxLayout();
     QLabel* vwidth = new QLabel(QString::number(bmp_image->get_width()) + QString(" px"));
     QLabel* vheight = new QLabel(QString::number(bmp_image->get_height()) + QString(" px"));
-    QLabel* vsize = new QLabel(QString::number(bmp_image->get_size()) + QString(" bytes"));
+
+    // make size beauty
+    std::vector<QString> units{" B", " Kb", " Mb", " Gb"};
+    int power = round(log(bmp_image->get_size())/log(1024));
+    power = std::min(power, static_cast<int>(units.size() - 1));
+    double beauty_size = bmp_image->get_size() / pow(1024, power);
+
+    QString unit = units.at(power);
+    // make size beauty
+
+    QLabel* vsize = new QLabel(QString::number(beauty_size, 'g', 3) + unit);
     QLabel* vbitcount = new QLabel(QString::number(bmp_image->get_bitcount()) + QString(" bits"));
     values->addWidget(vwidth);
     values->addWidget(vheight);
@@ -305,11 +345,57 @@ void MainWindow::on_actionImage_info_triggered() {
     content->addLayout(labels);
     content->addLayout(values);
 
+    info->setAttribute(Qt::WA_DeleteOnClose);
     info->setLayout(content);
     info->show();
 }
 
 void MainWindow::on_actionHelp_triggered() {
     Help_dialog* help = new Help_dialog;
+    help->setAttribute(Qt::WA_DeleteOnClose);
     help->show();
+}
+
+void MainWindow::save_as(QWidget *parent) {
+    QString file_path = "";
+    if (parent) {
+        file_path = QFileDialog::getSaveFileName(parent, "Save a file"); // in case if file dialog will be exec from save_dialog
+    } else {
+        file_path = QFileDialog::getSaveFileName(this, "Save a file");
+    }
+
+    if (file_path != "") {
+        Bmp::save(bmp_image, file_path.toStdString());
+        prev_file_path = open_file_path;
+        open_file_path = file_path;
+
+        Bmp_image* opening_bmp_image = Bmp::bmp(file_path.toStdString());
+        if (opening_bmp_image) {
+            bmp_image = opening_bmp_image;
+            prev_file_path = open_file_path;
+            open_file_path = file_path;
+            scene->clear();
+
+            // some crutch to align center new image                                 :(
+            delete scene; //                                                         :(
+            scene = new My_graphics_scene; //                                        :(
+            connect(scene, SIGNAL(mouseReleased()), this, SLOT(mouseReleased())); // :>
+            // some crutch to align center new image                                 :(
+
+            this->setWindowTitle(QString("LULpainter ") + open_file_path);
+            scene->addPixmap(QPixmap::fromImage(bmp_image->get_qImage()));
+            ui->graphics_view->setScene(scene);
+            changed = false;
+        } else {
+            QErrorMessage err_msg;
+            err_msg.setWindowTitle("Opening file error");
+            err_msg.showMessage("Saving was successfull!"
+                                "Can't open this file on some reason.");
+            err_msg.setStyleSheet("QPushButton {"
+                                  "    color: white;"
+                                  "    background-color: rgb(75, 75, 75);"
+                                  "}");
+            err_msg.exec();
+        }
+    }
 }

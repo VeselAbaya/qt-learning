@@ -3,20 +3,48 @@
 
 #include "bmp_image.h"
 
+/*! \def ALIGNMENT24(width)
+ * Macros which return amount of needed alignment in bytes
+ * It's accept width of raster image in bytes
+ */
 #define ALIGNMENT24(width) (4*(((width)*3)%4 ? 1 : 0) - ((width)*3)%4)
+
+#include <QErrorMessage>
 
 #include <cstdint>   // for uint8_t
 #include <algorithm> // for max, min
 #include <fstream>
 #include <string>
 
+/*! \class Bmp_image24
+ * \brief Bmp_image implementation for 24-bitcount images
+ */
 class Bmp_image24: public Bmp_image {
 public:
-    Bmp_image24(std::string file_path);     // Deprecated, better use: Bmp::bmp() from bmp.h
-    Bmp_image24(int width, int height, uint8_t* raster=nullptr); // in case of nullptr white image will be created
+    /*! Constructor
+     * \param file_path Image file path
+     * \remark better use: Bmp::bmp() from bmp.h
+     */
+    Bmp_image24(std::string file_path);
+
+    /*! Constructor
+     * \param width Image width in pixels
+     * \param height Image height in pixels
+     * \param raster Image raster
+     * \remark in case of nullptr white image will be created
+     */
+    Bmp_image24(int width, int height, uint8_t* raster=nullptr);
+
+    /*! Copy constructor */
     Bmp_image24(Bmp_image24 const& other);
+
+    /*! Assignment operator */
     Bmp_image24& operator=(Bmp_image24 const& other);
+
+    /*! Relocating сopy constructor */
     Bmp_image24(Bmp_image24&& other);
+
+    /*! Relocating asiignment operator */
     Bmp_image24& operator=(Bmp_image24&& other);
 
     ~Bmp_image24();
@@ -44,11 +72,11 @@ public:
     virtual void expanse(int vertical_exp, int horizontal_crop, Bmp::Resize_direction direction, QColor color);
 private:
 
-    int size;         // size in bytes
-    int width;        // width in pixels
-    int height;       // height in pixels
-    short bitcount;   // bits on color
-    uint8_t** raster; // raster image in bytes
+    int size;         /*!< Image size in bytes */
+    int width;        /*!< Image width in px */
+    int height;       /*!< Image height in px */
+    short bitcount;   /*!< Image bitcount in bits/color */
+    uint8_t** raster; /*!< Raster image */
 };
 
 #endif // BMP_IMAGE24_H

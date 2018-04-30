@@ -1,0 +1,47 @@
+\hypertarget{bmp_8h}{}\section{bmp.\+h File Reference}
+\label{bmp_8h}\index{bmp.\+h@{bmp.\+h}}
+
+
+lol  
+
+
+{\ttfamily \#include \char`\"{}bmp\+\_\+image24.\+h\char`\"{}}\\*
+{\ttfamily \#include $<$Q\+Message\+Box$>$}\\*
+{\ttfamily \#include $<$Q\+Error\+Message$>$}\\*
+Include dependency graph for bmp.\+h\+:
+% FIG 0
+This graph shows which files directly or indirectly include this file\+:
+% FIG 1
+\subsection*{Namespaces}
+\begin{DoxyCompactItemize}
+\item 
+ \hyperlink{namespaceBmp}{Bmp}
+\begin{DoxyCompactList}\small\item\em Namespace for functions to work with bmp. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\#define \hyperlink{bmp_8h_ae6308415d4958bcb506570b6a156583c}{B\+I\+\_\+\+S\+I\+ZE}~40
+\end{DoxyCompactItemize}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{classBmp__image}{Bmp\+\_\+image} $\ast$ \hyperlink{namespaceBmp_a0516017b061918b7c396d5a85a356d80}{Bmp\+::bmp} (std\+::string file\+\_\+path)
+\begin{DoxyCompactList}\small\item\em To open a bmp file. \end{DoxyCompactList}\item 
+\hyperlink{classBmp__image}{Bmp\+\_\+image} $\ast$ \hyperlink{namespaceBmp_a8ddbb8d2fcb9df1522415088eae7e53f}{Bmp\+::copy} (\hyperlink{classBmp__image}{Bmp\+\_\+image} $\ast$image)
+\begin{DoxyCompactList}\small\item\em To copy a bmp file \char`\"{}copy constructor\char`\"{} for all bitcounts. \end{DoxyCompactList}\item 
+\hyperlink{classBmp__image}{Bmp\+\_\+image} $\ast$ \hyperlink{namespaceBmp_a9f54637816ad1d1be6a5f700af19fb4d}{Bmp\+::create} (int width, int height)
+\begin{DoxyCompactList}\small\item\em To create new bmp image. \end{DoxyCompactList}\item 
+void \hyperlink{namespaceBmp_a98d314a663fc3a6fe51b76d0e4a4811c}{Bmp\+::save} (\hyperlink{classBmp__image}{Bmp\+\_\+image} $\ast$image, std\+::string file\+\_\+path=\char`\"{}\char`\"{})
+\begin{DoxyCompactList}\small\item\em To save bmp file. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+lol 
+
+
+
+\subsection{Macro Definition Documentation}
+\index{bmp.\+h@{bmp.\+h}!B\+I\+\_\+\+S\+I\+ZE@{B\+I\+\_\+\+S\+I\+ZE}}
+\index{B\+I\+\_\+\+S\+I\+ZE@{B\+I\+\_\+\+S\+I\+ZE}!bmp.\+h@{bmp.\+h}}
+\subsubsection[{\texorpdfstring{B\+I\+\_\+\+S\+I\+ZE}{BI_SIZE}}]{\setlength{\rightskip}{0pt plus 5cm}\#define B\+I\+\_\+\+S\+I\+ZE~40}\hypertarget{bmp_8h_ae6308415d4958bcb506570b6a156583c}{}\label{bmp_8h_ae6308415d4958bcb506570b6a156583c}
+\hyperlink{structBitMapInfo}{Bit\+Map\+Info} struct size 

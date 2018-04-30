@@ -20,7 +20,16 @@ Bmp_image* Bmp::bmp(std::string file_path) {
 
                 Bmp_image* bmp_image = nullptr;
                 switch(static_cast<int>(bitcount)) {
-                    case 24: bmp_image = new Bmp_image24(file_path); break; // There 2 files are reading from two functions (need to fix!)
+                    case 24:
+                        try {
+                            bmp_image = new Bmp_image24(file_path); // There 2 files are reading from two functions (need to fix!)
+                        } catch (std::bad_alloc& e) {
+                            QErrorMessage err_msg;
+                            err_msg.setWindowTitle("Bad allocation");
+                            err_msg.showMessage(QString("Not enough memory to do this operation"));
+                            err_msg.exec();
+                            bmp_image = nullptr;
+                        } break;
                     default:
                         QErrorMessage msg_box;
                         msg_box.setWindowTitle("Unsupported bitcount");
@@ -122,5 +131,14 @@ void Bmp::save(Bmp_image *image, std::string file_path) {
             // there is no default case because all Bmp_image classes support the invariant
             // (here can't be incorrect bitcount)
         }
+    } else {
+        QErrorMessage err_msg;
+        err_msg.setWindowTitle("Saving file error");
+        err_msg.showMessage("Can't save this file on some reason.");
+        err_msg.setStyleSheet("QPushButton {"
+                              "    color: white;"
+                              "    background-color: rgb(75, 75, 75);"
+                              "}");
+        err_msg.exec();
     }
 }

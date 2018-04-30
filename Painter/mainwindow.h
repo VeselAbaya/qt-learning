@@ -18,9 +18,15 @@
 #include <QCloseEvent>
 #include <QHBoxLayout>
 #include <QVBoxLayout>
+#include <QInputDialog>
+
+#include <algorithm>
 
 namespace Ui { class MainWindow; }
 
+/*! \class MainWindow
+ * \brief Class for work with desktop user interface
+ */
 class MainWindow: public QMainWindow {
     Q_OBJECT
 
@@ -38,6 +44,7 @@ private slots:
     void mouseReleased();
     void crop_image(int vertical_crop, int horizontal_crop, Bmp::Resize_direction crop_direction);
     void expanse_image(int vertical_exp, int horizontal_exp, Bmp::Resize_direction expanse_direction, QColor color);
+    void save_as(QWidget* parent=nullptr);
 
     void on_actionOpen_triggered();
     void on_actionSave_triggered();
@@ -49,24 +56,22 @@ private slots:
     void on_actionQuit_triggered();
     void on_actionNew_triggered();
     void on_actionCrop_3_triggered();
-
     void on_actionExpanse_triggered();
-
     void on_actionImage_info_triggered();
-
     void on_actionHelp_triggered();
 
 private:
     Ui::MainWindow* ui;
-    My_graphics_scene* scene;
-    Bmp_image* bmp_image;
-    QString open_file_path;
+    My_graphics_scene* scene; /*!< Scene with opened image */
+    Bmp_image* bmp_image;     /*!< Pointer on image */
 
+    QString open_file_path;   /*!< Opened image file path */
+    QString prev_file_path;   /*!< Pevious image file path */
     // flags
-    bool grayscale_clicked;
-    bool invert_clicked;
-    bool cancel_clicked;
-    bool changed;
+    bool grayscale_clicked;   /*!< Grayscale tool choosen */
+    bool invert_clicked;      /*!< Invert colot tool choosen */
+    bool cancel_clicked;      /*!< Cancel button in save dialog clicked */
+    bool changed;             /*!< Image has been changed */
 };
 
 #endif // MAINWINDOW_H

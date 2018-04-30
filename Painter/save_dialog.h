@@ -10,6 +10,9 @@ namespace Ui {
     class save_quit_dialog;
 }
 
+/*! \class Save_dialog
+ * \brief Class implements saving dialog
+ */
 class Save_dialog: public QDialog {
     Q_OBJECT
 
@@ -18,8 +21,15 @@ public:
     ~Save_dialog();
 
 signals:
-    void save_button_clicked();
-    void cancel_button_clicked(bool);
+    /*! Signal emited when save button is clicked
+     * \param save_dialog Pointer on this dialog
+     * (needed to open make this dialog parent of file dialog)
+     */
+    void save_button_clicked(QWidget* save_dialog);
+    /*! Signal emited when cancel button is clicked
+     * \param clicked If cancel clicked - true, else - false
+     */
+    void cancel_button_clicked(bool clicked);
 
 private slots:
     void closeEvent(QCloseEvent* event);

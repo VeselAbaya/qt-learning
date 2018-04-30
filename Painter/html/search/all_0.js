@@ -1,0 +1,25 @@
+var searchData=
+[
+  ['bfoffbits',['bfOffBits',['../structBitMapFileHeader.html#a8f9826fd212549a50718ffde5ccee43f',1,'BitMapFileHeader']]],
+  ['bfreserved1',['bfReserved1',['../structBitMapFileHeader.html#a2c5cfaf1990593f4b9f980bcb528e82f',1,'BitMapFileHeader']]],
+  ['bfreserved2',['bfReserved2',['../structBitMapFileHeader.html#aeaae0d627a62f9ca61be427dc3a99852',1,'BitMapFileHeader']]],
+  ['bfsize',['bfSize',['../structBitMapFileHeader.html#a18198264845f2443c8b6d972c4bd404f',1,'BitMapFileHeader']]],
+  ['bftype1',['bfType1',['../structBitMapFileHeader.html#a9fec7cc3a304b3f557a6ab13f58b35ca',1,'BitMapFileHeader']]],
+  ['bftype2',['bfType2',['../structBitMapFileHeader.html#a561a5c86bbc4f06973f803ee0b7b2f60',1,'BitMapFileHeader']]],
+  ['bibitcount',['biBitCount',['../structBitMapInfo.html#a3f4084cb6c90d147211a6f72cd130ffc',1,'BitMapInfo']]],
+  ['biclrimportant',['biClrImportant',['../structBitMapInfo.html#a36418d0dbc8269b1b72ddbd794c9487f',1,'BitMapInfo']]],
+  ['biclrused',['biClrUsed',['../structBitMapInfo.html#a720f71f528378c533bc3703206c09bcd',1,'BitMapInfo']]],
+  ['bicompression',['biCompression',['../structBitMapInfo.html#aa9ba5846e707d9f5a864d074a4c08f1e',1,'BitMapInfo']]],
+  ['biheight',['biHeight',['../structBitMapInfo.html#a5130bfb9c8a6b3ad1ba710965ef3e61e',1,'BitMapInfo']]],
+  ['biplanes',['biPlanes',['../structBitMapInfo.html#a23dc89abcd16d62312b33e94d2c819b8',1,'BitMapInfo']]],
+  ['bisize',['biSize',['../structBitMapInfo.html#a58417194f170d7733156cbcca49099e6',1,'BitMapInfo']]],
+  ['bisizeimage',['biSizeImage',['../structBitMapInfo.html#a6d98abd57de85a278eb3da36c13cbff4',1,'BitMapInfo']]],
+  ['bitmapfileheader',['BitMapFileHeader',['../structBitMapFileHeader.html',1,'']]],
+  ['bitmapinfo',['BitMapInfo',['../structBitMapInfo.html',1,'']]],
+  ['biwidth',['biWidth',['../structBitMapInfo.html#aa43e4572f40397137e4149503764d151',1,'BitMapInfo']]],
+  ['bixpelspermeter',['biXPelsPerMeter',['../structBitMapInfo.html#ae9c2afcdcf52ddf9f5fdb843576a4581',1,'BitMapInfo']]],
+  ['biypelspermeter',['biYPelsPerMeter',['../structBitMapInfo.html#a669501761a51dc29cdee4367a7c24aed',1,'BitMapInfo']]],
+  ['bmp',['Bmp',['../namespaceBmp.html',1,'Bmp'],['../namespaceBmp.html#a0516017b061918b7c396d5a85a356d80',1,'Bmp::bmp()']]],
+  ['bmp_5fimage',['Bmp_image',['../classBmp__image.html',1,'']]],
+  ['bmp_5fimage24',['Bmp_image24',['../classBmp__image24.html',1,'Bmp_image24'],['../classBmp__image24.html#a4790a96366f1e1d8985510ce1e83d576',1,'Bmp_image24::Bmp_image24(std::string file_path)'],['../classBmp__image24.html#a62cde711e1fe6bb462e9330fc6fff5a9',1,'Bmp_image24::Bmp_image24(int width, int height, uint8_t *raster=nullptr)'],['../classBmp__image24.html#a10a35b5d6550d4caeb2e1d488dfbf6a4',1,'Bmp_image24::Bmp_image24(Bmp_image24 const &amp;other)'],['../classBmp__image24.html#a9f725fe5a381fb97c6f65965e1bfe549',1,'Bmp_image24::Bmp_image24(Bmp_image24 &amp;&amp;other)']]]
+];

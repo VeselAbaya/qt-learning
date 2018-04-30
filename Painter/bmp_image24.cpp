@@ -1,5 +1,5 @@
 #include "bmp_image24.h"
-
+#include <QDebug>
 Bmp_image24::Bmp_image24(std::string file_path) {
     if (file_path != "") {
         BitMapFileHeader bm_header;
@@ -29,9 +29,10 @@ Bmp_image24::Bmp_image24(std::string file_path) {
                     file.read(reinterpret_cast<char*>(&raster[i][j]), 1);
                 }
             }
+
+            file.close();
         }
 
-        file.close();
     }
 }
 
@@ -264,8 +265,8 @@ void Bmp_image24::invert_color(int x1, int y1, int x2, int y2) {
         y2 = 0;
     }
 
-    int x_min = std::min(x1, x2);
-    int y_min = std::min(y1, y2);
+    int x_min = std::min(std::min(x1, x2), width);
+    int y_min = std::min(std::min(y1, y2), height);
     int x_max = std::min(std::max(x1, x2), width);  // in case of std::max() out of image
     int y_max = std::min(std::max(y1, y2), height);
 
@@ -291,8 +292,8 @@ void Bmp_image24::grayscale(int x1, int y1, int x2, int y2) {
         y2 = 0;
     }
 
-    int x_min = std::min(x1, x2);
-    int y_min = std::min(y1, y2);
+    int x_min = std::min(std::min(x1, x2), width);
+    int y_min = std::min(std::min(y1, y2), height);
     int x_max = std::min(std::max(x1, x2), width);
     int y_max = std::min(std::max(y1, y2), height);
 

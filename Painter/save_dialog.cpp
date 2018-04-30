@@ -12,7 +12,7 @@ Save_dialog::~Save_dialog() {
 }
 
 void Save_dialog::on_save_button_clicked() {
-    emit save_button_clicked();
+    emit save_button_clicked(this);
     done(0);
 }
 

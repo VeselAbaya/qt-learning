@@ -23,6 +23,66 @@
       <height>613</height>
      </rect>
     </property>
+    <property name="styleSheet">
+     <string notr="true">QGraphicsView {
+	color: rgb(75, 75, 75);
+	border: 0px;
+}
+
+QScrollBar:horizontal {
+	background: transparent;
+    height: 10px;
+}
+QScrollBar::handle:horizontal {
+    background: rgb(75, 75, 75);
+	border-radius: 5px;
+    min-width: 10px;
+}
+QScrollBar::add-line:horizontal {
+	background: transparent;
+	width: 10px;
+    subcontrol-position: right;
+    subcontrol-origin: margin;
+}
+
+QScrollBar::sub-line:horizontal {
+    background: transparent;
+    width: 10px;
+	subcontrol-position: left;
+    subcontrol-origin: margin;
+}
+
+QScrollBar:vertical {
+	background: transparent;
+    opacity: 1;
+    width:10px;
+}
+QScrollBar::handle:vertical {
+    background: rgb(75, 75, 75);
+	border-radius: 5px;
+    min-height: 10px;
+}
+QScrollBar::add-line:vertical {
+	background: transparent;
+    height: 10px;
+}
+
+QScrollBar::sub-line:vertical {
+    background: transparent;
+    height: 10px;
+}
+
+QAbstractScrollArea::corner {
+    background: none;
+    border: none;
+}</string>
+    </property>
+    <property name="frameShadow">
+     <enum>QFrame::Sunken</enum>
+    </property>
+    <property name="sizeAdjustPolicy">
+     <enum>QAbstractScrollArea::AdjustIgnored</enum>
+    </property>
    </widget>
   </widget>
   <widget class="QMenuBar" name="menuBar">
@@ -59,8 +119,8 @@
     </widget>
     <addaction name="actionGraysacle"/>
     <addaction name="actionInvert"/>
-    <addaction name="menuResize"/>
     <addaction name="actionImage_info"/>
+    <addaction name="menuResize"/>
    </widget>
    <widget class="QMenu" name="menuHelp">
     <property name="title">
@@ -123,6 +183,12 @@ background-color: rgb(75, 75, 75);</string>
   <action name="actionNew">
    <property name="text">
     <string>New</string>
+   </property>
+   <property name="toolTip">
+    <string comment="Create 640x480 image">New</string>
+   </property>
+   <property name="whatsThis">
+    <string>Create 640x480 image</string>
    </property>
    <property name="shortcut">
     <string>Ctrl+N</string>
@@ -197,6 +263,9 @@ background-color: rgb(75, 75, 75);</string>
   </action>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
+ <tabstops>
+  <tabstop>graphics_view</tabstop>
+ </tabstops>
  <resources/>
  <connections/>
 </ui>

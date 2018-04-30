@@ -230,6 +230,14 @@ color: white;</string>
    </property>
   </widget>
  </widget>
+ <tabstops>
+  <tabstop>crop_direction</tabstop>
+  <tabstop>color_button</tabstop>
+  <tabstop>vertical_crop</tabstop>
+  <tabstop>horizontal_crop</tabstop>
+  <tabstop>ok_button</tabstop>
+  <tabstop>cancel_button</tabstop>
+ </tabstops>
  <resources/>
  <connections/>
 </ui>
