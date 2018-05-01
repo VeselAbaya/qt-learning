@@ -278,6 +278,7 @@ void MainWindow::crop_image(int vertical_crop, int horizontal_crop, Bmp::Resize_
     scene->addPixmap(QPixmap::fromImage(bmp_image->get_qImage()));
     ui->graphics_view->setScene(scene);
 
+    emit image_changed(bmp_image);
     changed = true;
 }
 
@@ -303,51 +304,16 @@ void MainWindow::expanse_image(int vertical_exp, int horizontal_exp,
     scene->addPixmap(QPixmap::fromImage(bmp_image->get_qImage()));
     ui->graphics_view->setScene(scene);
 
+    emit image_changed(bmp_image);
     changed = true;
 }
 
 void MainWindow::on_actionImage_info_triggered() {
-    QDialog* info = new QDialog(this);
-    info->setWindowTitle("Image info");
-    // here may be memory leaks;
-    QVBoxLayout* labels = new QVBoxLayout();
-    QLabel* width = new QLabel("Width:      ");
-    QLabel* height = new QLabel("Height:     ");
-
-    QLabel* size = new QLabel("Size:          ");
-    QLabel* bitcount = new QLabel("Bitcount: ");
-    labels->addWidget(width);
-    labels->addWidget(height);
-    labels->addWidget(size);
-    labels->addWidget(bitcount);
-
-    QVBoxLayout* values = new QVBoxLayout();
-    QLabel* vwidth = new QLabel(QString::number(bmp_image->get_width()) + QString(" px"));
-    QLabel* vheight = new QLabel(QString::number(bmp_image->get_height()) + QString(" px"));
-
-    // make size beauty
-    std::vector<QString> units{" B", " Kb", " Mb", " Gb"};
-    int power = round(log(bmp_image->get_size())/log(1024));
-    power = std::min(power, static_cast<int>(units.size() - 1));
-    double beauty_size = bmp_image->get_size() / pow(1024, power);
-
-    QString unit = units.at(power);
-    // make size beauty
-
-    QLabel* vsize = new QLabel(QString::number(beauty_size, 'g', 3) + unit);
-    QLabel* vbitcount = new QLabel(QString::number(bmp_image->get_bitcount()) + QString(" bits"));
-    values->addWidget(vwidth);
-    values->addWidget(vheight);
-    values->addWidget(vsize);
-    values->addWidget(vbitcount);
-
-    QHBoxLayout* content = new QHBoxLayout();
-    content->addLayout(labels);
-    content->addLayout(values);
-
-    info->setAttribute(Qt::WA_DeleteOnClose);
-    info->setLayout(content);
-    info->show();
+    Info_dialog* info_dialog = new Info_dialog(bmp_image);
+    connect(this, SIGNAL(image_changed(Bmp_image const*)), info_dialog, SLOT(change_info(Bmp_image const*)));
+    info_dialog->setAttribute(Qt::WA_DeleteOnClose);
+    info_dialog->setWindowFlags(Qt::WindowStaysOnTopHint);
+    info_dialog->show();
 }
 
 void MainWindow::on_actionHelp_triggered() {

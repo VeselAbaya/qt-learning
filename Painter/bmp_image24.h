@@ -5,8 +5,7 @@
 
 /*! \def ALIGNMENT24(width)
  * Macros which return amount of needed alignment in bytes
- * It's accept width of raster image in bytes
- */
+ * It's accept width of raster image in bytes */
 #define ALIGNMENT24(width) (4*(((width)*3)%4 ? 1 : 0) - ((width)*3)%4)
 
 #include <QErrorMessage>
@@ -17,22 +16,19 @@
 #include <string>
 
 /*! \class Bmp_image24
- * \brief Bmp_image implementation for 24-bitcount images
- */
+ * \brief Bmp_image implementation for 24-bitcount images */
 class Bmp_image24: public Bmp_image {
 public:
     /*! Constructor
      * \param file_path Image file path
-     * \remark better use: Bmp::bmp() from bmp.h
-     */
+     * \remark better use: Bmp::bmp() from bmp.h */
     Bmp_image24(std::string file_path);
 
     /*! Constructor
      * \param width Image width in pixels
      * \param height Image height in pixels
      * \param raster Image raster
-     * \remark in case of nullptr white image will be created
-     */
+     * \remark in case of nullptr white image will be created */
     Bmp_image24(int width, int height, uint8_t* raster=nullptr);
 
     /*! Copy constructor */

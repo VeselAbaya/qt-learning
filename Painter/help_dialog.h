@@ -8,8 +8,7 @@ namespace Ui {
 }
 
 /*! \class Help_dialog
- * \brief Class for help dialog content
- */
+ * \brief Class for help dialog content */
 class Help_dialog : public QDialog {
     Q_OBJECT
 

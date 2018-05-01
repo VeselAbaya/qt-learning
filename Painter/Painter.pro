@@ -32,7 +32,8 @@ SOURCES += \
     save_dialog.cpp \
     crop_dialog.cpp \
     expanse_dialog.cpp \
-    help_dialog.cpp
+    help_dialog.cpp \
+    info_dialog.cpp
 
 HEADERS += \
         mainwindow.h \
@@ -44,7 +45,8 @@ HEADERS += \
     resize_direction.h \
     crop_dialog.h \
     expanse_dialog.h \
-    help_dialog.h
+    help_dialog.h \
+    info_dialog.h
 
 FORMS += \
         mainwindow.ui \

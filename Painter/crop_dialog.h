@@ -11,16 +11,14 @@ namespace Ui {
 }
 
 /*! \class Crop_dialog
- * \brief Class for implementation of image crop
- */
+ * \brief Class for implementation of image crop */
 class Crop_dialog: public QDialog {
     Q_OBJECT
 
 public:
     /*! Constructor
      * \param max_width Width of cropping image
-     * \param max_height Height of cropping image
-     */
+     * \param max_height Height of cropping image */
     explicit Crop_dialog(int max_width, int max_height, QWidget *parent = 0);
     ~Crop_dialog();
 
@@ -28,8 +26,7 @@ signals:
     /*! Ok button emitting signal
      * \param vertical_crop Vertiacal crop size in pixels
      * \param horizontal_crop Horizontal crop size in pixels
-     * \param direction Crop direction
-     */
+     * \param direction Crop direction */
     void ok_button_clicked(int vertical_crop, int horizontal_crop, Bmp::Resize_direction direction);
 
 private slots:

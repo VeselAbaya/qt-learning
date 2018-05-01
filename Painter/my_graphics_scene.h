@@ -6,8 +6,7 @@
 #include <QPoint>
 
 /*! \class My_graphics_scene
- * \brief Class with override QGraphicsScene's events slots
- */
+ * \brief Class with override QGraphicsScene's events slots */
 class My_graphics_scene: public QGraphicsScene {
     Q_OBJECT
 
@@ -25,13 +24,11 @@ signals:
 
 public slots:
     /*! Method to get start point
-     * \return Start point: from which selection started
-     */
+     * \return Start point: from which selection started */
     QPoint get_first();
 
     /*! Method to get finish point
-     * \return Finish point: where selection finished
-     */
+     * \return Finish point: where selection finished */
     QPoint get_last();
 
 private slots:

@@ -13,8 +13,7 @@ namespace Ui {
 }
 
 /*! \class Expanse_dialog
- * \brief Class for implementation of image expanse
- */
+ * \brief Class for implementation of image expanse */
 class Expanse_dialog: public QDialog {
     Q_OBJECT
 
@@ -27,8 +26,7 @@ signals:
      * \param vertical_crop Vertiacal crop size in pixels
      * \param horizontal_crop Horizontal crop size in pixels
      * \param direction Crop direction
-     * \param color Fill color
-     */
+     * \param color Fill color */
     void ok_button_clicked(int vertical_crop, int horizontal_crop, Bmp::Resize_direction direction, QColor color);
 
 private slots:

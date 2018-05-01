@@ -7,7 +7,7 @@
 #include "crop_dialog.h"
 #include "expanse_dialog.h"
 #include "help_dialog.h"
-
+#include "info_dialog.h"
 #include <QMainWindow>
 #include <QSettings>
 #include <QFileDialog>
@@ -25,14 +25,18 @@
 namespace Ui { class MainWindow; }
 
 /*! \class MainWindow
- * \brief Class for work with desktop user interface
- */
+ * \brief Class for work with desktop user interface */
 class MainWindow: public QMainWindow {
     Q_OBJECT
 
 public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
+
+signals:
+    /*! Emitted when image changes proprety
+     * \param image Changed image */
+    void image_changed(Bmp_image const* image);
 
 private slots:
     void read_settings();  // read config (size and position of window, path to last opened image)
