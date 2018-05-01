@@ -18,6 +18,7 @@ public:
     /*! Constructor
      * \param image Bmp image */
     explicit Info_dialog(Bmp_image const* image);
+    ~Info_dialog();
 
 public slots:
     /*! Method to change info according to image */

@@ -5,8 +5,6 @@
 #include <QDebug>
 MainWindow::MainWindow(QWidget *parent): QMainWindow(parent),
                                          ui(new Ui::MainWindow) {
-//    ui->graphics_view->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-//    ui->graphics_view->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     ui->setupUi(this);
     setCentralWidget(ui->graphics_view);
 
@@ -74,17 +72,18 @@ void MainWindow::on_actionOpen_triggered() {
             bmp_image = opening_bmp_image;
             prev_file_path = open_file_path;
             open_file_path = file_path;
-            scene->clear();
+            setWindowTitle(QString("LULpainter ") + open_file_path);
 
+            scene->clear();
             // some crutch to align center new image                                 :(
             delete scene; //                                                         :(
             scene = new My_graphics_scene; //                                        :(
             connect(scene, SIGNAL(mouseReleased()), this, SLOT(mouseReleased())); // :>
             // some crutch to align center new image                                 :(
 
-            setWindowTitle(QString("LULpainter ") + open_file_path);
             scene->addPixmap(QPixmap::fromImage(bmp_image->get_qImage()));
             ui->graphics_view->setScene(scene);
+
             changed = false;
         } else {
             QErrorMessage err_msg;
@@ -144,11 +143,11 @@ void MainWindow::closeEvent(QCloseEvent *event) {
     if (changed) {
         Save_dialog* dialog = new Save_dialog(this);
 
-        if (open_file_path != "") {
+        if (open_file_path != "")
             connect(dialog, SIGNAL(save_button_clicked(QWidget*)), this, SLOT(on_actionSave_triggered()));
-        } else {
+        else
             connect(dialog, SIGNAL(save_button_clicked(QWidget*)), this, SLOT(save_as(QWidget*)));
-        }
+
 
         connect(dialog, SIGNAL(cancel_button_clicked(bool)), this, SLOT(cancel_toggle()));
         dialog->exec();
@@ -159,9 +158,8 @@ void MainWindow::closeEvent(QCloseEvent *event) {
         event->ignore();
         cancel_clicked = false;
     } else {
-        if (open_file_path == "") {
+        if (open_file_path == "")
             open_file_path = prev_file_path;
-        }
 
         write_settings();
         event->accept();
@@ -196,11 +194,12 @@ void MainWindow::on_actionNew_triggered() {
         bmp_image = opening_bmp_image;
         prev_file_path = open_file_path;
         open_file_path = ""; // this is for config
+        this->setWindowTitle(QString("LULpainter"));
+
         scene->addPixmap(QPixmap::fromImage(bmp_image->get_qImage()));
         ui->graphics_view->setScene(scene);
-        changed = true;
 
-        this->setWindowTitle(QString("LULpainter"));
+        changed = true;
     }
 
 }
@@ -230,9 +229,10 @@ void MainWindow::read_settings() {
 
         if (bmp_image) {
             open_file_path = file_path;
+            this->setWindowTitle(QString("LULpainter ") + open_file_path);
+
             scene->addPixmap(QPixmap::fromImage(bmp_image->get_qImage()));
             ui->graphics_view->setScene(scene);
-            this->setWindowTitle(QString("LULpainter ") + open_file_path);
         }
     }
 }
@@ -243,8 +243,8 @@ void MainWindow::grayscale_toggle() {
     ui->mainToolBar->widgetForAction(ui->actioncoordinates_invert)->setStyleSheet("width: 115px;"
                                                                                   "background: rgb(75, 75, 75);");
 
-    grayscale_clicked = true;
     invert_clicked = false;
+    grayscale_clicked = true;
 }
 
 void MainWindow::invert_toggle() {
@@ -324,11 +324,10 @@ void MainWindow::on_actionHelp_triggered() {
 
 void MainWindow::save_as(QWidget *parent) {
     QString file_path = "";
-    if (parent) {
+    if (parent)
         file_path = QFileDialog::getSaveFileName(parent, "Save a file"); // in case if file dialog will be exec from save_dialog
-    } else {
+    else
         file_path = QFileDialog::getSaveFileName(this, "Save a file");
-    }
 
     if (file_path != "") {
         Bmp::save(bmp_image, file_path.toStdString());
@@ -340,17 +339,18 @@ void MainWindow::save_as(QWidget *parent) {
             bmp_image = opening_bmp_image;
             prev_file_path = open_file_path;
             open_file_path = file_path;
-            scene->clear();
+            this->setWindowTitle(QString("LULpainter ") + open_file_path);
 
+            scene->clear();
             // some crutch to align center new image                                 :(
             delete scene; //                                                         :(
             scene = new My_graphics_scene; //                                        :(
             connect(scene, SIGNAL(mouseReleased()), this, SLOT(mouseReleased())); // :>
             // some crutch to align center new image                                 :(
 
-            this->setWindowTitle(QString("LULpainter ") + open_file_path);
             scene->addPixmap(QPixmap::fromImage(bmp_image->get_qImage()));
             ui->graphics_view->setScene(scene);
+
             changed = false;
         } else {
             QErrorMessage err_msg;

@@ -17,8 +17,7 @@
  *
  * \subsection Expanse
  * To expanse image choose Expanse tool.
- * In opened dialog choose direction of expansion, backgorund-fill color, vertical and horizontal size (in pixels)
- */
+ * In opened dialog choose direction of expansion, backgorund-fill color, vertical and horizontal size (in pixels) */
 
 int main(int argc, char *argv[]) {
     QApplication app(argc, argv);

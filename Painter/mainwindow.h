@@ -8,6 +8,7 @@
 #include "expanse_dialog.h"
 #include "help_dialog.h"
 #include "info_dialog.h"
+
 #include <QMainWindow>
 #include <QSettings>
 #include <QFileDialog>

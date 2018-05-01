@@ -5,8 +5,7 @@ Bmp_image24::Bmp_image24(std::string file_path) {
         BitMapFileHeader bm_header;
         BitMapInfo       bm_info;
 
-        std::ifstream file;
-        file.open(file_path, std::ios::in | std::ios::binary);
+        std::ifstream file(file_path, std::ios::in | std::ios::binary);
         if (file.is_open()) {
             file.read(reinterpret_cast<char*>(&bm_header), sizeof(BitMapFileHeader));
             file.read(reinterpret_cast<char*>(&bm_info), sizeof(BitMapInfo));
@@ -37,12 +36,11 @@ Bmp_image24::Bmp_image24(std::string file_path) {
 }
 
 Bmp_image24::Bmp_image24(int width, int height, uint8_t* raster): size(height * ((width*3) + ALIGNMENT24(width))), // 24 - bitcount
-                                                                          width(width),
-                                                                          height(height),
-                                                                          bitcount(24) {
+                                                                  width(width),
+                                                                  height(height),
+                                                                  bitcount(24) {
     this->raster = new uint8_t*[height];
-    this->raster[0] = new uint8_t[size];
-
+    this->raster[0] = new uint8_t[size]{};
     for (int i = 1; i != height; ++i) {
         this->raster[i] = this->raster[i-1] + ((width*3) + ALIGNMENT24(width));
     }
@@ -52,16 +50,8 @@ Bmp_image24::Bmp_image24(int width, int height, uint8_t* raster): size(height * 
             for (int j = 0; j != (width*3); ++j) {
                 this->raster[i][j] = raster[i*(width*3) + j];
             }
-
-            // alignment
-            for (int j = width*3; j != (width*3) + ALIGNMENT24(width); ++j) {
-                this->raster[i][j] = 0;
-            }
         }
     } else {
-        // allocation
-        this->raster = new uint8_t*[height];
-        this->raster[0] = new uint8_t[size];
         for (int i = 1; i != height; ++i) {
             this->raster[i] = this->raster[i-1] + ((width*3) + ALIGNMENT24(width));
         }
@@ -244,10 +234,10 @@ void Bmp_image24::invert_color() {
 void Bmp_image24::grayscale() {
     for (int i = 0; i != height; ++i) {
         for (int j = 0; j < (width*3) + ALIGNMENT24(width) - 3; j+=3) {
-            double luma = 0.2126*raster[i][j] + 0.7152*raster[i][j+1] + 0.0722*raster[i][j+2]; // https://habrahabr.ru/post/304210/﻿
-            raster[i][j] = static_cast<uint8_t>(luma);
-            raster[i][j+1] = static_cast<uint8_t>(luma);
-            raster[i][j+2] = static_cast<uint8_t>(luma);
+            uint8_t luma = 0.2126*raster[i][j] + 0.7152*raster[i][j+1] + 0.0722*raster[i][j+2]; // https://habrahabr.ru/post/304210/﻿
+            raster[i][j] = luma;
+            raster[i][j+1] = luma;
+            raster[i][j+2] = luma;
         }
     }
 }
@@ -255,15 +245,10 @@ void Bmp_image24::grayscale() {
 void Bmp_image24::invert_color(int x1, int y1, int x2, int y2) {
     // find upper left and lower right corners coordinates
     // in case of out of image
-    if (x1 < 0) {
-        x1 = 0;
-    } if (y1 < 0) {
-        y1 = 0;
-    } if (x2 < 0) {
-        x2 = 0;
-    } if (y2 < 0) {
-        y2 = 0;
-    }
+    if (x1 < 0) x1 = 0;
+    if (y1 < 0) y1 = 0;
+    if (x2 < 0) x2 = 0;
+    if (y2 < 0) y2 = 0;
 
     int x_min = std::min(std::min(x1, x2), width);
     int y_min = std::min(std::min(y1, y2), height);
@@ -282,15 +267,10 @@ void Bmp_image24::invert_color(int x1, int y1, int x2, int y2) {
 void Bmp_image24::grayscale(int x1, int y1, int x2, int y2) {
     // find upper left and lower right corners coordinates
     // in case of out of image
-    if (x1 < 0) {
-        x1 = 0;
-    } if (y1 < 0) {
-        y1 = 0;
-    } if (x2 < 0) {
-        x2 = 0;
-    } if (y2 < 0) {
-        y2 = 0;
-    }
+    if (x1 < 0) x1 = 0;
+    if (y1 < 0) y1 = 0;
+    if (x2 < 0) x2 = 0;
+    if (y2 < 0) y2 = 0;
 
     int x_min = std::min(std::min(x1, x2), width);
     int y_min = std::min(std::min(y1, y2), height);
@@ -310,12 +290,12 @@ void Bmp_image24::crop(int vertical_crop, int horizontal_crop, Bmp::Resize_direc
     height -= vertical_crop;
     width -= horizontal_crop;
     size = height * (width*3 + ALIGNMENT24(width));
+
     uint8_t** cropped_raster = new uint8_t*[height];
-    cropped_raster[0] = new uint8_t[size];
+    cropped_raster[0] = new uint8_t[size]{};
     for (int i = 1; i != height; ++i) {
         cropped_raster[i] = cropped_raster[i-1] + ((width*3) + ALIGNMENT24(width));
     }
-
 
     switch (direction) {
         case Bmp::Resize_direction::center:
@@ -370,6 +350,7 @@ void Bmp_image24::expanse(int vertical_exp, int horizontal_exp, Bmp::Resize_dire
     height += vertical_exp;
     width += horizontal_exp;
     size = height * (width*3 + ALIGNMENT24(width));
+
     uint8_t** expansed_raster = new uint8_t*[height];
     expansed_raster[0] = new uint8_t[size]{};
     for (int i = 1; i != height; ++i) {
