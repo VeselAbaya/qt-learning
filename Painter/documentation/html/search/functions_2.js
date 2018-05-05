@@ -1,5 +1,6 @@
 var searchData=
 [
+  ['err_5fbitcount',['err_bitcount',['../classBmp_1_1Bad__bitcount.html#a6d7358f13b176d37be4e6b3be65865d2',1,'Bmp::Bad_bitcount']]],
   ['err_5fheight',['err_height',['../classBmp_1_1Bad__size.html#a2302e117d377c3b5753a9867c3510831',1,'Bmp::Bad_size']]],
   ['err_5fhorizontal',['err_horizontal',['../classBmp_1_1Bad__resize.html#aefb703491017c8d8b4f2a6399900f732',1,'Bmp::Bad_resize']]],
   ['err_5fvertical',['err_vertical',['../classBmp_1_1Bad__resize.html#a45fff38af327b19de132f184d572c3b3',1,'Bmp::Bad_resize']]],
