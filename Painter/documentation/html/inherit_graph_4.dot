@@ -3,7 +3,15 @@ digraph "Graphical Class Hierarchy"
   edge [fontname="Helvetica",fontsize="10",labelfontname="Helvetica",labelfontsize="10"];
   node [fontname="Helvetica",fontsize="10",shape=record];
   rankdir="LR";
-  Node1 [label="QMainWindow",height=0.2,width=0.4,color="grey75", fillcolor="white", style="filled"];
+  Node1 [label="QDialog",height=0.2,width=0.4,color="grey75", fillcolor="white", style="filled"];
   Node1 -> Node2 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
-  Node2 [label="MainWindow",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$classMainWindow.html",tooltip="Class for work with desktop user interface. "];
+  Node2 [label="Crop_dialog",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$classCrop__dialog.html",tooltip="Class for implementation of image crop. "];
+  Node1 -> Node3 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node3 [label="Expanse_dialog",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$classExpanse__dialog.html",tooltip="Class for implementation of image expanse. "];
+  Node1 -> Node4 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node4 [label="Help_dialog",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$classHelp__dialog.html",tooltip="Class for help dialog content. "];
+  Node1 -> Node5 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node5 [label="Info_dialog",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$classInfo__dialog.html",tooltip="Class for implementation of dialog with information about image. "];
+  Node1 -> Node6 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node6 [label="Save_dialog",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$classSave__dialog.html",tooltip="Class implements saving dialog. "];
 }

@@ -2,8 +2,12 @@
 #define BMP_H
 
 #include "bmp_image24.h"
+
 #include <QMessageBox>
 #include <QErrorMessage>
+
+#include <string>
+#include <memory>
 
 /*! \def BI_SIZE
  * BitMapInfo struct size */

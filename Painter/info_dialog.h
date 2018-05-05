@@ -24,7 +24,7 @@ public slots:
     /*! Method to change info according to image */
     void change_info(Bmp_image const* image);
 
-    /*! Method to make size more human readable
+    /*! Static Method to make size more human readable
      * \param size (in bytes)
      * \return QString width good implementation */
     static QString make_beauty(int size);

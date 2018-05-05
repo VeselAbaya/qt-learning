@@ -67,33 +67,47 @@ void MainWindow::on_actionOpen_triggered() {
             }
         }
 
-        Bmp_image* opening_bmp_image = Bmp::bmp(file_path.toStdString());
-        if (opening_bmp_image) {
-            bmp_image = opening_bmp_image;
-            prev_file_path = open_file_path;
-            open_file_path = file_path;
-            setWindowTitle(QString("LULpainter ") + open_file_path);
+        try {
+            Bmp_image* opening_bmp_image = Bmp::bmp(file_path.toStdString());
+            if (opening_bmp_image) {
+                bmp_image = opening_bmp_image;
+                prev_file_path = open_file_path;
+                open_file_path = file_path;
+                setWindowTitle(QString("LULpainter ") + open_file_path);
 
-            scene->clear();
-            // some crutch to align center new image                                 :(
-            delete scene; //                                                         :(
-            scene = new My_graphics_scene; //                                        :(
-            connect(scene, SIGNAL(mouseReleased()), this, SLOT(mouseReleased())); // :>
-            // some crutch to align center new image                                 :(
+                scene->clear();
+                // some crutch to align center new image                                 :(
+                delete scene; //                                                         :(
+                scene = new My_graphics_scene; //                                        :(
+                connect(scene, SIGNAL(mouseReleased()), this, SLOT(mouseReleased())); // :>
+                // some crutch to align center new image                                 :(
 
-            scene->addPixmap(QPixmap::fromImage(bmp_image->get_qImage()));
-            ui->graphics_view->setScene(scene);
+                scene->addPixmap(QPixmap::fromImage(bmp_image->get_qImage()));
+                ui->graphics_view->setScene(scene);
 
-            changed = false;
-        } else {
-            QErrorMessage err_msg;
-            err_msg.setWindowTitle("Opening file error");
-            err_msg.showMessage("Can't open this file on some reason.");
-            err_msg.setStyleSheet("QPushButton {"
+                changed = false;
+            } else {
+                QErrorMessage err_msg;
+                err_msg.setWindowTitle("Opening file error");
+                err_msg.showMessage("Can't open this file on some reason.");
+                err_msg.setStyleSheet("QPushButton {"
+                                      "    color: white;"
+                                      "    background-color: rgb(75, 75, 75);"
+                                      "}");
+                err_msg.exec();
+            }
+        } catch (Bmp::Bad_bitcount& err) {
+            QErrorMessage err_box;
+            err_box.setWindowTitle("Unsupported bitcount");
+            err_box.showMessage(QString(err.what()) + QString("\nUploading image's bitcount: ") + QString::number(err.err_bitcount()));
+            err_box.setMaximumSize(490, 170);
+            err_box.setMinimumSize(490, 170);
+            err_box.setStyleSheet("QPushButton {"
                                   "    color: white;"
                                   "    background-color: rgb(75, 75, 75);"
                                   "}");
-            err_msg.exec();
+            err_box.exec();
+
         }
     }
 }

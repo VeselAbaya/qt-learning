@@ -2,6 +2,7 @@
 #define BMP_IMAGE_H
 
 #include "resize_direction.h"
+#include "bmp_exceptions.h"
 
 #include <QColor>
 #include <QImage>

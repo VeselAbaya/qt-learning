@@ -1,5 +1,8 @@
 var searchData=
 [
+  ['bad_5fbitcount',['Bad_bitcount',['../classBmp_1_1Bad__bitcount.html',1,'Bmp']]],
+  ['bad_5fresize',['Bad_resize',['../classBmp_1_1Bad__resize.html',1,'Bmp']]],
+  ['bad_5fsize',['Bad_size',['../classBmp_1_1Bad__size.html',1,'Bmp']]],
   ['bfoffbits',['bfOffBits',['../structBitMapFileHeader.html#a8f9826fd212549a50718ffde5ccee43f',1,'BitMapFileHeader']]],
   ['bfreserved1',['bfReserved1',['../structBitMapFileHeader.html#a2c5cfaf1990593f4b9f980bcb528e82f',1,'BitMapFileHeader']]],
   ['bfreserved2',['bfReserved2',['../structBitMapFileHeader.html#aeaae0d627a62f9ca61be427dc3a99852',1,'BitMapFileHeader']]],

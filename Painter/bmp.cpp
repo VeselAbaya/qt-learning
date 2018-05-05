@@ -30,19 +30,7 @@ Bmp_image* Bmp::bmp(std::string file_path) {
                             bmp_image = nullptr;
                         } break;
                     default:
-                        QErrorMessage msg_box;
-                        msg_box.setWindowTitle("Unsupported bitcount");
-                        msg_box.showMessage("This version supports only 24 bitcount\n"
-                                        "Uploading image's bitcount: " + QString::number(bitcount));
-                        msg_box.setMaximumSize(480, 170);
-                        msg_box.setMinimumSize(480, 170);
-                        msg_box.setStyleSheet("QPushButton {"
-                                              "    color: white;"
-                                              "    background-color: rgb(75, 75, 75);"
-                                              "}");
-                        msg_box.exec();
-
-                        bmp_image = nullptr;
+                        throw Bmp::Bad_bitcount{static_cast<int>(bitcount)};
                 }
 
                 return bmp_image;

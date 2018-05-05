@@ -39,6 +39,10 @@ Bmp_image24::Bmp_image24(int width, int height, uint8_t* raster): size(height * 
                                                                   width(width),
                                                                   height(height),
                                                                   bitcount(24) {
+    if (width < 0 || height < 0) {
+        throw Bmp::Bad_size(width, height);
+    }
+
     this->raster = new uint8_t*[height];
     this->raster[0] = new uint8_t[size]{};
     for (int i = 1; i != height; ++i) {
@@ -84,7 +88,6 @@ Bmp_image24::Bmp_image24(Bmp_image24 const& other) {
         }
     }
 }
-
 
 Bmp_image24& Bmp_image24::operator=(Bmp_image24 const& other) {
     delete [] raster;
@@ -287,6 +290,10 @@ void Bmp_image24::grayscale(int x1, int y1, int x2, int y2) {
 }
 
 void Bmp_image24::crop(int vertical_crop, int horizontal_crop, Bmp::Resize_direction direction) {
+    if (vertical_crop < 0 || horizontal_crop < 0) {
+        throw Bmp::Bad_resize{vertical_crop, horizontal_crop};
+    }
+
     height -= vertical_crop;
     width -= horizontal_crop;
     size = height * (width*3 + ALIGNMENT24(width));
@@ -344,6 +351,10 @@ void Bmp_image24::crop(int vertical_crop, int horizontal_crop, Bmp::Resize_direc
 }
 
 void Bmp_image24::expanse(int vertical_exp, int horizontal_exp, Bmp::Resize_direction direction, QColor color) {
+    if (vertical_exp < 0 || horizontal_exp < 0) {
+        throw Bmp::Bad_resize{vertical_exp, horizontal_exp};
+    }
+
     int old_width = width;
     int old_height = height;
 

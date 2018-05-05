@@ -33,7 +33,8 @@ SOURCES += \
     crop_dialog.cpp \
     expanse_dialog.cpp \
     help_dialog.cpp \
-    info_dialog.cpp
+    info_dialog.cpp \
+    bmp_exceptions.cpp
 
 HEADERS += \
         mainwindow.h \
@@ -46,7 +47,8 @@ HEADERS += \
     crop_dialog.h \
     expanse_dialog.h \
     help_dialog.h \
-    info_dialog.h
+    info_dialog.h \
+    bmp_exceptions.h
 
 FORMS += \
         mainwindow.ui \

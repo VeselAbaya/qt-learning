@@ -28,6 +28,7 @@ public:
      * \param width Image width in pixels
      * \param height Image height in pixels
      * \param raster Image raster
+     * \throws Bmp::Bad_size
      * \remark in case of nullptr white image will be created */
     Bmp_image24(int width, int height, uint8_t* raster=nullptr);
 
