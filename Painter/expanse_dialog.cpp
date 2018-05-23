@@ -7,7 +7,6 @@ Expanse_dialog::Expanse_dialog(QWidget *parent): QDialog(parent),
     setWindowTitle("Expanse");
 
     read_settings();
-    set_background_color(color);
 }
 
 Expanse_dialog::~Expanse_dialog() {
@@ -62,6 +61,7 @@ void Expanse_dialog::read_settings() {
     ui->vertical_crop->setValue(settings.value("vertical_crop", 0).toInt());
     ui->horizontal_crop->setValue(settings.value("horizontal_crop", 0).toInt());
     ui->crop_direction->setCurrentIndex(settings.value("expanse_direction", 0).toInt());
+    set_background_color(color);
     resize(settings.value("size", QSize(403, 211)).toSize());
     move(settings.value("pos", QPoint(200, 200)).toPoint());
     settings.endGroup();

@@ -1,8 +1,7 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 // TODO the highest window title is ".../tiger.bmp" ???? WHAT
-// TODO add functionality to info_dialog (need to update image info dynamically)
-#include <QDebug>
+
 MainWindow::MainWindow(QWidget *parent): QMainWindow(parent),
                                          ui(new Ui::MainWindow) {
     ui->setupUi(this);
@@ -107,7 +106,6 @@ void MainWindow::on_actionOpen_triggered() {
                                   "    background-color: rgb(75, 75, 75);"
                                   "}");
             err_box.exec();
-
         }
     }
 }

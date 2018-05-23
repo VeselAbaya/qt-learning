@@ -1,5 +1,5 @@
 #include "bmp_image24.h"
-#include <QDebug>
+
 Bmp_image24::Bmp_image24(std::string file_path) {
     if (file_path != "") {
         BitMapFileHeader bm_header;
@@ -31,7 +31,6 @@ Bmp_image24::Bmp_image24(std::string file_path) {
 
             file.close();
         }
-
     }
 }
 
@@ -56,10 +55,6 @@ Bmp_image24::Bmp_image24(int width, int height, uint8_t* raster): size(height * 
             }
         }
     } else {
-        for (int i = 1; i != height; ++i) {
-            this->raster[i] = this->raster[i-1] + ((width*3) + ALIGNMENT24(width));
-        }
-
         for (int i = 0; i != height; ++i) {
             // null init for all bytes in new raster
             for (int j = 0; j != ((width*3) + ALIGNMENT24(width)); ++j) {
@@ -138,7 +133,6 @@ Bmp_image24& Bmp_image24::operator=(Bmp_image24&& other) {
     delete [] raster[0];
     delete [] raster;
 
-    raster   = other.raster;
     size     = other.size;
     height   = other.height;
     width    = other.width;

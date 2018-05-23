@@ -3,32 +3,28 @@
 Info_dialog::Info_dialog(Bmp_image const* image) {
     setWindowTitle("Image info");
     // here may be memory leaks;
-    QVBoxLayout* labels = new QVBoxLayout();
-    QLabel* width = new QLabel("Width:      ");
-    QLabel* height = new QLabel("Height:     ");
+    QHBoxLayout* content = new QHBoxLayout(this);
+    QVBoxLayout* labels = new QVBoxLayout(this);
+    QVBoxLayout* values = new QVBoxLayout(this);
 
-    QLabel* size = new QLabel("Size:          ");
-    QLabel* bitcount = new QLabel("Bitcount: ");
+    QLabel* width = new QLabel("Width:      ", this);
+    QLabel* height = new QLabel("Height:     ", this);
+    QLabel* size = new QLabel("Size:          ", this);
+    QLabel* bitcount = new QLabel("Bitcount: ", this);
     labels->addWidget(width);
     labels->addWidget(height);
     labels->addWidget(size);
     labels->addWidget(bitcount);
 
-    QVBoxLayout* values = new QVBoxLayout();
-    this->width = new QLabel(QString::number(image->get_width()) + QString(" px"));
-    this->height = new QLabel(QString::number(image->get_height()) + QString(" px"));
-
-    // make size beauty
-    // make size beauty
-
-    this->size = new QLabel(Info_dialog::make_beauty(image->get_size()));
-    this->bitcount = new QLabel(QString::number(image->get_bitcount()) + QString(" bits"));
+    this->width = new QLabel(QString::number(image->get_width()) + QString(" px"), this);
+    this->height = new QLabel(QString::number(image->get_height()) + QString(" px"), this);
+    this->size = new QLabel(Info_dialog::make_beauty(image->get_size()), this);
+    this->bitcount = new QLabel(QString::number(image->get_bitcount()) + QString(" bits"), this);
     values->addWidget(this->width);
     values->addWidget(this->height);
     values->addWidget(this->size);
     values->addWidget(this->bitcount);
 
-    QHBoxLayout* content = new QHBoxLayout();
     content->addLayout(labels);
     content->addLayout(values);
 
