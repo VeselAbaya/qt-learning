@@ -1,7 +1,12 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
+#include <cmath>
+
+#include <utility>
+
 #include <QMainWindow>
+#include <QErrorMessage>
 
 namespace Ui {
     class MainWindow;
@@ -15,12 +20,15 @@ public:
     ~MainWindow();
 
 private:
+    double left;
+    char op;
     Ui::MainWindow *ui;
 
 
 private slots:
     void digits_numbers();
     void operations();
+    void equals();
 
     void on_pushButton_dot_clicked();
     void on_pushButton_sign_clicked();
