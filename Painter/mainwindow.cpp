@@ -204,7 +204,8 @@ void MainWindow::on_actionNew_triggered() {
     if (opening_bmp_image) {
         delete bmp_image;
         bmp_image = opening_bmp_image;
-        prev_file_path = open_file_path;
+        if (!open_file_path.isEmpty())
+            prev_file_path = open_file_path;
         open_file_path = ""; // this is for config
         this->setWindowTitle(QString("LULpainter"));
 
@@ -212,6 +213,15 @@ void MainWindow::on_actionNew_triggered() {
         ui->graphics_view->setScene(scene);
 
         changed = true;
+    } else {
+        QErrorMessage err_msg;
+        err_msg.setWindowTitle(QString("Something went wrong"));
+        err_msg.showMessage("Can't open create new image");
+        err_msg.setStyleSheet("QPushButton {"
+                              "    color: white;"
+                              "    background-color: rgb(75, 75, 75);"
+                              "}");
+        err_msg.exec();
     }
 
 }
@@ -236,6 +246,7 @@ void MainWindow::read_settings() {
     settings.endGroup();
 
     QString file_path = QString(settings.value("file_path", "").toString());
+    prev_file_path = file_path;
     if (file_path != "") {
         bmp_image = Bmp::bmp(file_path.toStdString());
 
@@ -245,27 +256,47 @@ void MainWindow::read_settings() {
 
             scene->addPixmap(QPixmap::fromImage(bmp_image->get_qImage()));
             ui->graphics_view->setScene(scene);
+        } else {
+            QErrorMessage err_msg;
+            err_msg.setWindowTitle(QString("Opening file error: ") + file_path);
+            err_msg.showMessage("Can't open this file: maybe it had deleted or moved from old location.");
+            err_msg.setStyleSheet("QPushButton {"
+                                  "    color: white;"
+                                  "    background-color: rgb(75, 75, 75);"
+                                  "}");
+            err_msg.exec();
         }
     }
 }
 
 void MainWindow::grayscale_toggle() {
-    ui->mainToolBar->widgetForAction(ui->actioncoordinates_gray)->setStyleSheet("width: 115px;"
+    if (grayscale_clicked) {
+        ui->mainToolBar->widgetForAction(ui->actioncoordinates_gray)->setStyleSheet("width: 115px;"
+                                                                                "background: rgb(75, 75, 75);");
+    } else {
+        ui->mainToolBar->widgetForAction(ui->actioncoordinates_gray)->setStyleSheet("width: 115px;"
                                                                                 "background: rgb(150, 150, 150);");
+    }
+
     ui->mainToolBar->widgetForAction(ui->actioncoordinates_invert)->setStyleSheet("width: 115px;"
                                                                                   "background: rgb(75, 75, 75);");
 
     invert_clicked = false;
-    grayscale_clicked = true;
+    grayscale_clicked = !grayscale_clicked;
 }
 
 void MainWindow::invert_toggle() {
     ui->mainToolBar->widgetForAction(ui->actioncoordinates_gray)->setStyleSheet("width: 115px;"
                                                                                 "background: rgb(75, 75, 75);");
-    ui->mainToolBar->widgetForAction(ui->actioncoordinates_invert)->setStyleSheet("width: 115px;"
+    if (invert_clicked) {
+        ui->mainToolBar->widgetForAction(ui->actioncoordinates_invert)->setStyleSheet("width: 115px;"
+                                                                                  "background: rgb(75, 75, 75);");
+    } else {
+        ui->mainToolBar->widgetForAction(ui->actioncoordinates_invert)->setStyleSheet("width: 115px;"
                                                                                   "background: rgb(150, 150, 150);");
+    }
 
-    invert_clicked = true;
+    invert_clicked = !invert_clicked;
     grayscale_clicked = false;
 }
 

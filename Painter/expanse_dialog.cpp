@@ -68,7 +68,7 @@ void Expanse_dialog::read_settings() {
 }
 
 void Expanse_dialog::on_color_button_clicked() {
-    color = QColorDialog::getColor();
+    color = QColorDialog::getColor(Qt::black, this);
     set_background_color(color);
 }
 
